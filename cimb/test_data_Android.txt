@@ -1,0 +1,8 @@
+*** Variables ***
+${androidappPackage}    id.co.cimbniaga.mobile.android
+${androidVersion}    5.1.1
+${androiddeviceName}    Ami Samsung
+${androidplatformName}    Android
+${androidappiumServer}    http://localhost:4723/wd/hub
+${androidappName}    id.co.cimbniaga.mobile.android.GoMobile
+${userID}         testaut01

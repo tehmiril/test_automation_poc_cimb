@@ -1,8 +1,0 @@
-*** Variables ***
-${appPackage}     id.co.cimbniaga.mobile.android
-${androidVersion}    6.0.1
-${deviceName}     vivo 1606
-${platformName}    Android
-${appiumServer}    http://localhost:4723/wd/hub
-${appName}        id.co.cimbniaga.mobile.android.GoMobile
-${userID}          

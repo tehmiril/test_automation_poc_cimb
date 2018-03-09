@@ -5,4 +5,26 @@ Open IOS CIMB app
     Set Suite Variable    ${iosdriver}
 
 Open Android CIMB app
-    Open Application    ${appiumServer}    platformName=${androidplatformName}    platformVersion=${androidVersion}    deviceName=${androiddeviceName}    appPackage=${androidappPackage}    appActivity=${androidappName}
+    ${CIMB_app}=    Open Application    ${androidappiumServer}    platformName=${androidplatformName}    platformVersion=${androidVersion}    deviceName=${androiddeviceName}    appPackage=${androidappPackage}
+    ...    appActivity=${androidappName}    noReset=true
+    Wait Until Keyword Succeeds    15s    3s    Element Should Be Visible    //android.widget.EditText[@text="Input User ID here"]
+    Set Suite Variable    ${CIMB_app}    ${CIMB_app}
+
+Login_app
+    [Arguments]    ${user_id}
+    Input Text    //android.widget.EditText    ${user_id}
+    Hide Keyboard
+    Element Should Be Enabled    //android.widget.Button[@text="LOGIN"]
+    Click Element    //android.widget.Button[@text="LOGIN"]
+    Wait Until Keyword Succeeds    10s    2s    Element Should Be Visible    //android.widget.TextView[@text="Passcode"]
+    ${status_otp}    Run Keyword And Return Status    Page Should Contain Text    We have sent you a one time passcode for ${user_id}
+    Run Keyword If    ${status_otp}==${FALSE}    Fail    No OTP
+    Get_OTP
+    Input Text    //android.widget.ViewFlipper/descendant::android.widget.EditText[@text=""]    ${current_element_otp}
+    Hide Keyboard
+    Click Element    //android.widget.Button[@text="SUBMIT"]
+    Wait Until Keyword Succeeds    10s    2s    Element Should Be Visible    //android.widget.TextView[@text="${user_id}"]
+
+Logout_app
+    Click Element    //android.widget.Button[text="x"]
+    Wait Until Keyword Succeeds    10s    2s    Element Should Be Visible    //android.widget.TextView[@text="Passcode"]
