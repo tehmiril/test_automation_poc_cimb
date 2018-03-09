@@ -1,0 +1,8 @@
+*** Keywords ***
+Open IOS CIMB app
+    ${iosdriver}    Open Application    ${appiumServer}    platformName=${iosplatformName}    platformVersion=${iosVersion}    deviceName=${iosdeviceName}    bundleId=${iosappPackage}
+    ...    udid=${UDID1}    newCommandTimeout=10000    automationName=${automationName}
+    Set Suite Variable    ${iosdriver}
+
+Open Android CIMB app
+    Open Application    ${appiumServer}    platformName=${androidplatformName}    platformVersion=${androidVersion}    deviceName=${androiddeviceName}    appPackage=${androidappPackage}    appActivity=${androidappName}

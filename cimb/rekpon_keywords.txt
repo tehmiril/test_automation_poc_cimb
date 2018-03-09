@@ -1,0 +1,7 @@
+*** Keywords ***
+RekPon_Validate_Balance
+    [Arguments]    ${userID}    ${balance}
+    Open Android CIMB app
+    Wait Until Keyword Succeeds    15s    5s    Element Should Be Visible    class=android.widget.EditText
+    Input Text    class=android.widget.EditText    ${userID}
+    Click Element    //*[@text="LOGIN"]
