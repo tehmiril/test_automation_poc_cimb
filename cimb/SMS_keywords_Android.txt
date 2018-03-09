@@ -27,3 +27,4 @@ Select_1418_SMS
     ${total_strings}    Get Length    ${list_otp}
     ${final_otp}    Get From List    ${list_otp}    ${total_strings-1}
     Set Suite Variable    ${current_element_otp}    ${final_otp}
+    Capture Page Screenshot    otp_now.png

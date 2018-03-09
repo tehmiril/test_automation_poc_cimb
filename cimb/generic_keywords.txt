@@ -18,13 +18,56 @@ Login_app
     Click Element    //android.widget.Button[@text="LOGIN"]
     Wait Until Keyword Succeeds    10s    2s    Element Should Be Visible    //android.widget.TextView[@text="Passcode"]
     ${status_otp}    Run Keyword And Return Status    Page Should Contain Text    We have sent you a one time passcode for ${user_id}
+    Capture Page Screenshot    otp_sent.png
     Run Keyword If    ${status_otp}==${FALSE}    Fail    No OTP
     Get_OTP
     Input Text    //android.widget.ViewFlipper/descendant::android.widget.EditText[@text=""]    ${current_element_otp}
     Hide Keyboard
     Click Element    //android.widget.Button[@text="SUBMIT"]
     Wait Until Keyword Succeeds    10s    2s    Element Should Be Visible    //android.widget.TextView[@text="${user_id}"]
+    #Logout_app
 
 Logout_app
     Click Element    //android.widget.Button[text="x"]
-    Wait Until Keyword Succeeds    10s    2s    Element Should Be Visible    //android.widget.TextView[@text="Passcode"]
+    Wait Until Keyword Succeeds    10s    2s    Element Should Be Visible    //android.widget.TextView[@text="Home"]
+    Swipe_down_until_element    //android.widget.TextView[@text="Log Out"]
+    Click Element    //android.widget.TextView[@text="Log Out"]
+    Wait Until Keyword Succeeds    10s    2s    Element Should Be Visible    //android.widget.TextView[@text="Are you sure you want to log out?"]
+    Click Element    //android.widget.TextView[@text="YES"]
+    Wait Until Keyword Succeeds    15s    3s    Element Should Be Visible    //android.widget.EditText[@text="Input User ID here"]
+
+Swipe_down_until_element
+    : FOR    ${loop}    IN RANGE    0    10
+    \    Swipe    600    600    600    300
+    \    ${count_element}    Get Matching Xpath Count    ${element}
+    \    Run Keyword If    ${count_element}==1    Run Keywords    Log    Stop swipe down
+    \    ...    AND    Exit For Loop
+
+Open_transfer
+    Click Element    //android.widget.TextView[text="Transfer"]
+    Wait Until Keyword Succeeds    10s    2s    Element Should Be Visible    //android.widget.TextView[@text="Transfer"]
+
+Select_transfer_to_other_RekPon
+    Click Element    //android.widget.TextView[text="Transfer to Rekening Ponsel"]
+    Wait Until Keyword Succeeds    10s    2s    Element Should Be Visible    //android.widget.TextView[@text="Transfer"]
+
+Fill_in_transfer_RekPon_details
+    [Arguments]    ${dest_num}    ${transfer_amount}
+    Input Text    //android.widget.TextView[@text="Enter Mobile number"]    ${dest_num}    #085349251023
+    Hide Keyboard
+    Input Text    //android.widget.TextView[@text="Enter amount"]    ${transfer_amount}    #10000
+    Hide Keyboard
+    Capture Page Screenshot    transfer_rekpon_details1.png
+    #Input Text    //android.widget.TextView[@text="Enter Description (optional)"]    testaut
+    #Hide Keyboard
+    Swipe_down_until_element    //android.widget.Button[@text="NEXT"]
+    Click Element    //android.widget.Button[@text="NEXT"]
+    Wait Until Keyword Succeeds    10s    2s    Element Should Be Visible    //android.widget.TextView[@text="Confirm"]
+    Capture Page Screenshot    transfer_rekpon_confirm.png
+
+Positive_rekpon_transfer_to_other_rekpon
+    [Arguments]    ${user_id}    ${dest_num}    ${transfer_amount}
+    Login_app    ${user_id}
+    Open_transfer
+    Select_transfer_to_other_RekPon
+    Fill_in_transfer_RekPon_details
