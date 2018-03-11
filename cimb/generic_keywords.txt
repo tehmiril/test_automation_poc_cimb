@@ -6,37 +6,41 @@ Open IOS CIMB app
 
 Open Android CIMB app
     ${CIMB_app}=    Open Application    ${androidappiumServer}    platformName=${androidplatformName}    platformVersion=${androidVersion}    deviceName=${androiddeviceName}    appPackage=${androidappPackage}
-    ...    appActivity=${androidappName}    noReset=true
-    Wait Until Keyword Succeeds    15s    3s    Element Should Be Visible    //android.widget.EditText[@text="Input User ID here"]
+    ...    appActivity=${androidappName}    noReset=true    automationName=UiAutomator2
+    Wait Until Keyword Succeeds    15s    3s    Element Should Be Visible    ${textbox_login_obj}
     Set Suite Variable    ${CIMB_app}    ${CIMB_app}
 
 Login_app
     [Arguments]    ${user_id}
-    Input Text    //android.widget.EditText    ${user_id}
+    Click Element    ${textbox_login_obj}
+    Input Text    ${textbox_login_obj}    ${user_id}
     Hide Keyboard
-    Element Should Be Enabled    //android.widget.Button[@text="LOGIN"]
-    Click Element    //android.widget.Button[@text="LOGIN"]
+    Element Should Be Enabled    ${login_button_obj}
+    Click Element    ${login_button_obj}
     Wait Until Keyword Succeeds    10s    2s    Element Should Be Visible    //android.widget.TextView[@text="Passcode"]
     ${status_otp}    Run Keyword And Return Status    Page Should Contain Text    We have sent you a one time passcode for ${user_id}
     Capture Page Screenshot    otp_sent.png
     Run Keyword If    ${status_otp}==${FALSE}    Fail    No OTP
     Get_OTP
-    Input Text    //android.widget.ViewFlipper/descendant::android.widget.EditText[@text=""]    ${current_element_otp}
+    Click Element    ${otp_login_obj}
+    Input Text    ${otp_login_obj}    ${current_element_otp}
+    #Click Element    //android.widget.ViewFlipper/descendant::android.widget.EditText[@text=""]
+    #Input Text    //android.widget.ViewFlipper/descendant::android.widget.EditText[@text=""]    ${current_element_otp}
     Hide Keyboard
-    Click Element    //android.widget.Button[@text="SUBMIT"]
+    Click Element    ${submit_otp_button_obj}
     Wait Until Keyword Succeeds    10s    2s    Element Should Be Visible    //android.widget.TextView[@text="${user_id}"]
-    #Logout_app
 
 Logout_app
-    Click Element    //android.widget.Button[text="x"]
+    Click Element    //android.widget.Button[@text="x"]
     Wait Until Keyword Succeeds    10s    2s    Element Should Be Visible    //android.widget.TextView[@text="Home"]
     Swipe_down_until_element    //android.widget.TextView[@text="Log Out"]
     Click Element    //android.widget.TextView[@text="Log Out"]
     Wait Until Keyword Succeeds    10s    2s    Element Should Be Visible    //android.widget.TextView[@text="Are you sure you want to log out?"]
-    Click Element    //android.widget.TextView[@text="YES"]
-    Wait Until Keyword Succeeds    15s    3s    Element Should Be Visible    //android.widget.EditText[@text="Input User ID here"]
+    Click Element    //android.widget.Button[@text="YES"]
+    Wait Until Keyword Succeeds    15s    3s    Element Should Be Visible    ${textbox_login_obj}
 
 Swipe_down_until_element
+    [Arguments]    ${element}
     : FOR    ${loop}    IN RANGE    0    10
     \    Swipe    600    600    600    300
     \    ${count_element}    Get Matching Xpath Count    ${element}
@@ -44,18 +48,20 @@ Swipe_down_until_element
     \    ...    AND    Exit For Loop
 
 Open_transfer
-    Click Element    //android.widget.TextView[text="Transfer"]
-    Wait Until Keyword Succeeds    10s    2s    Element Should Be Visible    //android.widget.TextView[@text="Transfer"]
+    Click Element    ${transfer_menu_button_obj}
+    Wait Until Keyword Succeeds    10s    2s    Element Should Be Visible    ${transfer_menu_button_obj}
 
 Select_transfer_to_other_RekPon
-    Click Element    //android.widget.TextView[text="Transfer to Rekening Ponsel"]
-    Wait Until Keyword Succeeds    10s    2s    Element Should Be Visible    //android.widget.TextView[@text="Transfer"]
+    Click Element    //android.widget.TextView[@text="Transfer to Rekening Ponsel"]
+    Wait Until Keyword Succeeds    10s    2s    Element Should Be Visible    ${transfer_menu_button_obj}
 
 Fill_in_transfer_RekPon_details
     [Arguments]    ${dest_num}    ${transfer_amount}
-    Input Text    //android.widget.TextView[@text="Enter Mobile number"]    ${dest_num}    #085349251023
+    Click Element    //android.widget.EditText[@text="Enter Mobile number"]
+    Input Text    //android.widget.EditText[@text="Enter Mobile number"]    ${dest_num}    #085349251023
     Hide Keyboard
-    Input Text    //android.widget.TextView[@text="Enter amount"]    ${transfer_amount}    #10000
+    Click Element    //android.widget.EditText[@text="Enter amount"]
+    Input Text    //android.widget.EditText[@text="Enter amount"]    ${transfer_amount}    #10000
     Hide Keyboard
     Capture Page Screenshot    transfer_rekpon_details1.png
     #Input Text    //android.widget.TextView[@text="Enter Description (optional)"]    testaut
@@ -65,9 +71,36 @@ Fill_in_transfer_RekPon_details
     Wait Until Keyword Succeeds    10s    2s    Element Should Be Visible    //android.widget.TextView[@text="Confirm"]
     Capture Page Screenshot    transfer_rekpon_confirm.png
 
+Validate_transfer_RekPon_confirm_page
+    [Arguments]    ${dest_num}    ${transfer_amount}
+    Swipe_down_until_element    //android.widget.TextView[@text="AMOUNT"]
+    Get_mobile_number_dest_for_validation    //android.widget.TextView[@text="TRANSFER TO"]/following-sibling::*/descendant::android.widget.TextView[@text="ACCOUNT NUMBER"]/following-sibling::android.widget.TextView
+    Get_amount_for_validation    //android.widget.TextView[@text="AMOUNT"]/following-sibling::android.widget.TextView
+    Should Be Equal As Integers    ${current_element_amount}    ${transfer_amount}
+    Should Be Equal As Integers    ${current_element_dest_num}    ${dest_num}
+
 Positive_rekpon_transfer_to_other_rekpon
     [Arguments]    ${user_id}    ${dest_num}    ${transfer_amount}
     Login_app    ${user_id}
     Open_transfer
     Select_transfer_to_other_RekPon
-    Fill_in_transfer_RekPon_details
+    Fill_in_transfer_RekPon_details    ${dest_num}    ${transfer_amount}
+    Validate_transfer_RekPon_confirm_page    ${dest_num}    ${transfer_amount}
+
+Get_amount_for_validation
+    [Arguments]    ${element}
+    ${full_amount_shown}    Get Text    ${element}
+    ${full_amount_string}    Convert To String    ${full_amount_shown}
+    ${elements_amount}    Split String    ${full_amount_string}    .
+    #Get the first from the list
+    ${amount_first}    Get From List    ${elements_amount}    0
+    ${finalelement_amount}    Strip String    ${amount_first}    characters=IDR${SPACE}
+    ${finalelement_amount2}    Remove String Using Regexp    ${finalelement_amount}    [,]
+    Set Suite Variable    ${current_element_amount}    ${finalelement_amount2}
+
+Get_mobile_number_dest_for_validation
+    [Arguments]    ${element}
+    ${dest_number_rekpon}    Get Text    ${element}
+    ${dest_number_rekpon_string}    Convert To String    ${dest_number_rekpon}
+    ${dest_number_rekpon_string2}    Replace String Using Regexp    ${dest_number_rekpon_string}    ^62    0
+    Set Suite Variable    ${current_element_dest_num}    ${dest_number_rekpon_string2}

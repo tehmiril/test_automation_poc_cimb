@@ -1,0 +1,6 @@
+*** Variables ***
+${textbox_login_obj}    //android.widget.EditText[@text="Input User ID here"]
+${login_button_obj}    //android.widget.Button[@text="LOGIN"]
+${otp_login_obj}    //android.widget.ViewFlipper/descendant::android.widget.EditText[1]
+${submit_otp_button_obj}    //android.widget.Button[@text="SUBMIT"]
+${transfer_menu_button_obj}    //android.widget.TextView[@text="Transfer"]
