@@ -6,9 +6,6 @@ ${androidplatformName}    Android
 ${androidappiumServer}    http://localhost:4723/wd/hub
 ${androidappName}    id.co.cimbniaga.mobile.android.GoMobile
 ${userID}         testaut01
-${mpin1}          2
-${mpin2}          2
-${mpin3}          1
-${mpin4}          1
-${mpin5}          9
-${mpin6}          6
+${mpin}           2;2;1;1;9;6
+${rekpon_dest}    085349251023
+${rekpon_transfer_balance}    10000

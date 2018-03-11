@@ -86,6 +86,7 @@ Positive_rekpon_transfer_to_other_rekpon
     Select_transfer_to_other_RekPon
     Fill_in_transfer_RekPon_details    ${dest_num}    ${transfer_amount}
     Validate_transfer_RekPon_confirm_page    ${dest_num}    ${transfer_amount}
+    Continue_transfer_RekPon_to_RekPon
 
 Get_amount_for_validation
     [Arguments]    ${element}
@@ -104,3 +105,28 @@ Get_mobile_number_dest_for_validation
     ${dest_number_rekpon_string}    Convert To String    ${dest_number_rekpon}
     ${dest_number_rekpon_string2}    Replace String Using Regexp    ${dest_number_rekpon_string}    ^62    0
     Set Suite Variable    ${current_element_dest_num}    ${dest_number_rekpon_string2}
+
+Continue_transfer_RekPon_to_RekPon
+    Click Element    //android.widget.Button[@text="CONFIRM"]
+    Wait Until Keyword Succeeds    10s    2s    Element Should Be Visible    //android.widget.TextView[@text="Enter Go Mobile PIN"]
+    ${command_pin}    Get Text    //android.widget.TextView[contains(@text,"Enter the")]
+    ${user_pin_string}    Convert To String    ${mpin}
+    ${user_pin}    Split String    ${user_pin_string}    ;
+    ${command_pin_string}    Convert To String    ${command_pin}
+    ${command_pin_string2}    Remove String    ${command_pin_string}    Enter the${SPACE}    ${SPACE}digit of your Go Mobile PIN
+    ${elements_pin}    Split String    ${command_pin_string2}    ${SPACE}and${SPACE}
+    ${pin_first}    Get From List    ${elements_pin}    0
+    ${pin_first_index}    Evaluate    ${pin_first}-1
+    ${pin_second}    Get From List    ${elements_pin}    1
+    ${pin_second_index}    Evaluate    ${pin_second}-1
+    ${enter_first_pin}    Get From List    ${user_pin}    ${pin_first_index}
+    ${enter_second_pin}    Get From List    ${user_pin}    ${pin_second_index}
+    Click Element    //android.widget.Button[@text="${enter_first_pin}"]
+    Click Element    //android.widget.Button[@text="${enter_second_pin}"]
+    Click Element    //android.widget.Button[@text="${SUBMIT}"]
+    #Sleep    5s
+    Wait Until Keyword Succeeds    10s    2s    Element Should Be Visible    //android.widget.TextView[@text="Transaction Successful"]
+    Sleep    3s
+    #Go back to main page
+    Click Element    //android.widget.Button[@text="Close"]
+    Wait Until Keyword Succeeds    10s    2s    Element Should Be Visible    //android.widget.TextView[@text="${user_id}"]
