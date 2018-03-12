@@ -9,3 +9,5 @@ ${userID}         testaut01
 ${mpin}           2;2;1;1;9;6
 ${rekpon_dest}    085349251023
 ${rekpon_transfer_balance}    10000
+${cc_dest}        5289190004452165
+${cc_payment_balance}    10000
