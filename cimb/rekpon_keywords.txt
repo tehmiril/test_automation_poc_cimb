@@ -5,3 +5,20 @@ RekPon_Validate_Balance
     Wait Until Keyword Succeeds    15s    5s    Element Should Be Visible    class=android.widget.EditText
     Input Text    class=android.widget.EditText    ${userID}
     Click Element    //*[@text="LOGIN"]
+
+Positive_rekpon_transfer_to_other_rekpon
+    [Arguments]    ${user_id}    ${dest_num}    ${transfer_amount}
+    Login_app    ${user_id}
+    Open_transfer
+    Select_transfer_to_other_RekPon
+    Fill_in_transfer_RekPon_details    ${dest_num}    ${transfer_amount}
+    Validate_transfer_RekPon_confirm_page    ${dest_num}    ${transfer_amount}
+    Continue_transfer_RekPon_to_RekPon
+
+Positive_rekpon_transfer_to_other_rekpon2
+    [Arguments]    ${dest_num}    ${transfer_amount}
+    Open_transfer
+    Select_transfer_to_other_RekPon
+    Fill_in_transfer_RekPon_details    ${dest_num}    ${transfer_amount}
+    Validate_transfer_RekPon_confirm_page    ${dest_num}    ${transfer_amount}
+    Continue_transfer_RekPon_to_RekPon

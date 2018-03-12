@@ -74,19 +74,11 @@ Fill_in_transfer_RekPon_details
 Validate_transfer_RekPon_confirm_page
     [Arguments]    ${dest_num}    ${transfer_amount}
     Swipe_down_until_element    //android.widget.TextView[@text="AMOUNT"]
+    #maybe perform more validation here
     Get_mobile_number_dest_for_validation    //android.widget.TextView[@text="TRANSFER TO"]/following-sibling::*/descendant::android.widget.TextView[@text="ACCOUNT NUMBER"]/following-sibling::android.widget.TextView
     Get_amount_for_validation    //android.widget.TextView[@text="AMOUNT"]/following-sibling::android.widget.TextView
     Should Be Equal As Integers    ${current_element_amount}    ${transfer_amount}
     Should Be Equal As Integers    ${current_element_dest_num}    ${dest_num}
-
-Positive_rekpon_transfer_to_other_rekpon
-    [Arguments]    ${user_id}    ${dest_num}    ${transfer_amount}
-    Login_app    ${user_id}
-    Open_transfer
-    Select_transfer_to_other_RekPon
-    Fill_in_transfer_RekPon_details    ${dest_num}    ${transfer_amount}
-    Validate_transfer_RekPon_confirm_page    ${dest_num}    ${transfer_amount}
-    Continue_transfer_RekPon_to_RekPon
 
 Get_amount_for_validation
     [Arguments]    ${element}
@@ -123,9 +115,10 @@ Continue_transfer_RekPon_to_RekPon
     ${enter_second_pin}    Get From List    ${user_pin}    ${pin_second_index}
     Click Element    //android.widget.Button[@text="${enter_first_pin}"]
     Click Element    //android.widget.Button[@text="${enter_second_pin}"]
-    Click Element    //android.widget.Button[@text="${SUBMIT}"]
+    Click Element    //android.widget.Button[@text="SUBMIT"]
     #Sleep    5s
     Wait Until Keyword Succeeds    10s    2s    Element Should Be Visible    //android.widget.TextView[@text="Transaction Successful"]
+    #maybe perform more validation here
     Sleep    3s
     #Go back to main page
     Click Element    //android.widget.Button[@text="Close"]
