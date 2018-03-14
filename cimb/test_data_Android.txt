@@ -1,7 +1,7 @@
 *** Variables ***
 ${androidappPackage}    id.co.cimbniaga.mobile.android
-${androidVersion}    5.1.1
-${androiddeviceName}    Ami Samsung
+${androidVersion}    5.1.1    #8.0.0
+${androiddeviceName}    Ami Samsung    #25b8e0b6
 ${androidplatformName}    Android
 ${androidappiumServer}    http://localhost:4723/wd/hub
 ${androidappName}    id.co.cimbniaga.mobile.android.GoMobile
@@ -11,3 +11,4 @@ ${rekpon_dest}    085349251023
 ${rekpon_transfer_balance}    10000
 ${cc_dest}        5289190004452165
 ${cc_payment_balance}    10000
+${rekpon_dest2}    082110685202

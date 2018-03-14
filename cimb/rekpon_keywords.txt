@@ -81,3 +81,4 @@ Continue_submit
     #Go back to main page
     Click Element    //android.widget.Button[@text="Close"]
     Wait Until Keyword Succeeds    10s    2s    Element Should Be Visible    //android.widget.TextView[@text="${user_id}"]
+    Sleep    2s

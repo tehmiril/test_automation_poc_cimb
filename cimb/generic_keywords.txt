@@ -9,6 +9,7 @@ Open Android CIMB app
     ...    appActivity=${androidappName}    noReset=true    automationName=UiAutomator2
     Wait Until Keyword Succeeds    15s    3s    Element Should Be Visible    ${textbox_login_obj}
     Set Suite Variable    ${CIMB_app}    ${CIMB_app}
+    Capture Page Screenshot    C:/Users/amiril.r.faradini/Documents/Robot/logs/screenshot/login_page.png
 
 Login_app
     [Arguments]    ${user_id}
