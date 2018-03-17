@@ -1,0 +1,28 @@
+*** Variables ***
+${textbox_login_obj}    accessibility_id=txtUserID
+#**/XCUIElementTypeTable[`name == "table"`]/**/XCUIElementTypeTextField[`name == "input" AND visible == 1`]
+${login_button_obj}    accessibility_id=btnLogin    #and @label="LOGIN"]
+${otp_login_obj}    accessibility_id=txtPasscode
+${submit_otp_button_obj}    accessibility_id=btnSubmit
+${transfer_menu_button_obj}    accessibility_id=btnTransfer
+${bill_payment_menu_button_obj}    accessibility_id=btnBillPayment
+${otp_main_label}    accessibility_id=lblpasscodetitle
+${open_left_menu_button_obj}    accessibility_id=btnHamMenuOpen
+${credit_card_bill_payment_obj}    accessibility_id=segBillPayment_1_2_lblTransferList
+${cc_number_bill_payment_obj}    accessibility_id=INPUTCUSTNO
+${cc_amount_bill_payment_obj}    accessibility_id=INPUTPAYAMT
+${submit_cc_bp_button_obj}    accessibility_id=btnSubmit
+${eop_confirm_bp_cc}    accessibility_id=segBillDetails_1_6_lblKey
+${cc_number_confirm_obj}    accessibility_id=segBillDetails_1_2_lblValue
+${cc_amount_confirm}    accessibility_id=segBillDetails_1_4_lblValue
+${titel_enter_pin_obj}    accessibility_id=lblEnterTxtInfo
+${close_success_transaction}    accessibility_id=btnClose
+${logout_obj}     accessibility_id=imgLogoutHome    #accessibility_id=flxSubLogOut
+${logout_yes_obj}    accessibility_id=btnLogoutYes
+${skip_feedback_obj}    accessibility_id=btnSkip
+${transfer_to_rekpon_obj}    accessibility_id=segTranferOptions_1_2_segTranferOptions_1_2
+${rekpon_dest_obj}    accessibility_id=txtAccountNumber
+${rekpon_amount_obj}    accessibility_id=txtFieldEnterAmount
+${next_transfer_rekpon_obj}    accessibility_id=btnNext
+${confirm_button_obj}    accessibility_id=btnConfirm
+${complete_transaction_button_obj}    accessibility_id=btnComplete

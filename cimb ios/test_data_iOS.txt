@@ -1,0 +1,18 @@
+*** Variables ***
+${androidappPackage}    id.co.cimbniaga.mobile.android
+${iosVersion}     version=10.3.3    #version=9.3.5
+${iosdeviceName}    Accenture-Mac01's iPhone    #Accenture01's iPhone
+${iosplatformName}    iOS
+${iosappiumServer}    http://localhost:4723/wd/hub
+${androidappName}    id.co.cimbniaga.mobile.android.GoMobile
+${userID}         testaut02
+${mpin}           2;2;1;1;9;6
+${rekpon_dest}    081314415099    #085349251023 \ \ 082110685202
+${rekpon_transfer_balance}    10000
+${cc_dest}        5289190004452165
+${cc_payment_balance}    10000
+${bundleID}       com.cimbniaga.CIMB
+${usePrebuiltWDA}    True
+${iosautomationName}    XCUITest
+#${UDID1}         3df3f20caab56f55dd21778d564473cf5e4e0dce
+${UDID1}          a1e70a0d643b3de2b863eeb578ed140d6a9c2b50

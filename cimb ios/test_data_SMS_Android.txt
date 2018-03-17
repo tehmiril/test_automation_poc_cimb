@@ -1,0 +1,8 @@
+*** Variables ***
+${appPackage_SMS}    com.google.android.apps.messaging
+${androidVersion_SMS}    5.1.1    #7.0
+${deviceName_SMS}    Ami Samsung    #G5 SE
+${platformName_SMS}    Android
+${appActivity_SMS}    .ui.ConversationListActivity
+${appiumServer_SMS}    http://localhost:4723/wd/hub
+${xl_sheetname}    Test Scenario

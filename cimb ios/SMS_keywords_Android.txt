@@ -1,0 +1,33 @@
+*** Keywords ***
+Get_OTP
+    Open_SMS
+    Select_1418_SMS
+    Close Application
+    Sleep    1s
+    Switch Application    ${ios_CIMB_app}
+
+Open_SMS
+    ${SMS_app}=    Open Application    ${appiumServer_SMS}    alias=SMS    platformName=${platformName_SMS}    platformVersion=${androidVersion_SMS}    deviceName=${deviceName_SMS}
+    ...    appPackage=${appPackage_SMS}    appActivity=${appActivity_SMS}    noReset=true
+    Set Suite Variable    ${SMS_app}    ${SMS_app}
+    ${current_activity}    Get Activity
+    Wait Until Element Is Visible    //*[@resource-id="com.google.android.apps.messaging:id/start_new_conversation_button"]    10s
+
+Select_1418_SMS
+    ${search_selected}    Run Keyword And Return Status    Element Should Be Visible    //android.widget.EditText
+    Run Keyword If    ${search_selected}    Hide Keyboard
+    Click Element    //*[@resource-id="com.google.android.apps.messaging:id/conversation_name" and @text="1418"]
+    Wait Until Element Is Visible    //*[@resource-id="com.google.android.apps.messaging:id/conversation_title" and @text="1418"]    10s
+    ${messages}    Get Matching Xpath Count    //*[@resource-id="android:id/list"]/android.widget.FrameLayout
+    ${message_text_last}    Get Element Attribute    //*[@resource-id="android:id/list"]/android.widget.FrameLayout[${messages}]/descendant::*[@class="android.widget.TextView" and contains (@text,"Jangan beri ke siapapun!")]    text
+    ${message_last_string}    Convert To String    ${message_text_last}
+    ${elements_messages}    Split String    ${message_last_string}    untuk
+    #Get the first from the list
+    ${otp_elements}    Get From List    ${elements_messages}    0
+    ${message_otp_string}    Convert To String    ${otp_elements}
+    ${list_otp}    Split String    ${message_otp_string}    Passcode
+    ${total_strings}    Get Length    ${list_otp}
+    ${final_otp}    Get From List    ${list_otp}    ${total_strings-1}
+    ${finalelement_otp}    Strip String    ${final_otp}    characters=${SPACE}
+    Set Suite Variable    ${current_element_otp}    ${finalelement_otp}
+    Capture Page Screenshot    otp_now.png

@@ -1,0 +1,42 @@
+*** Keywords ***
+Open_bill_payment
+    Click Element    ${bill_payment_menu_button_obj}
+    Wait Until Keyword Succeeds    10s    2s    Page Should Contain Text    Bill Payment    #Element Should Be Visible    ${bill_payment_menu_button_obj}
+
+Select_credit_card
+    Click Element    ${credit_card_bill_payment_obj}    #//android.widget.TextView[@text="Credit Card"]
+    Wait Until Keyword Succeeds    10s    2s    Page Should Contain Text    Credit Card    #Element Should Be Visible    //android.widget.TextView[@text="Credit Card"]
+
+Fill_in_credit_card_details
+    [Arguments]    ${dest_card}    ${transfer_amount}
+    Click Element    ${cc_number_bill_payment_obj}    #//android.widget.EditText[@text="Enter Card Number"]
+    Input Text    ${cc_number_bill_payment_obj}    ${dest_card}    #//android.widget.EditText[@text="Enter Card Number"]    5289190004452165
+    Hide Keyboard
+    Click Element    ${cc_amount_bill_payment_obj}    #//android.widget.EditText[@text="Enter payment amount"]
+    Input Text    ${cc_amount_bill_payment_obj}    ${transfer_amount}    #//android.widget.EditText[@text="Enter payment amount"]    10000
+    Hide Keyboard
+    Click Element    ${submit_cc_bp_button_obj}    #//android.widget.Button[@text="NEXT"]
+    Wait Until Keyword Succeeds    10s    2s    Page Should Contain Text    Confirm    #Element Should Be Visible    //android.widget.TextView[@text="Confirm"]
+    Capture Page Screenshot    transfer_cc_confirm.png
+
+Validate_pay_to_cc_confirm_page
+    [Arguments]    ${dest_card}    ${transfer_amount}
+    Swipe_down_until_element    ${eop_confirm_bp_cc}    #//android.widget.TextView[@text="TOTAL DUE"]
+    Get_cc_number_for_validation    ${cc_number_confirm_obj}    #//android.widget.TextView[@text="CARD NUMBER"]/following-sibling::android.widget.TextView
+    Get_amount_for_validation    ${cc_amount_confirm}    #//android.widget.TextView[@text="PAYMENT AMOUNT"]/following-sibling::android.widget.TextView
+    Should Be Equal As Integers    ${current_element_amount}    ${transfer_amount}
+    Should Be Equal As Integers    ${current_element_dest_cc}    ${dest_card}
+
+Get_cc_number_for_validation
+    [Arguments]    ${element}
+    ${dest_cc}    Get Text    ${element}
+    ${dest_cc_string}    Convert To String    ${dest_cc}
+    Set Suite Variable    ${current_element_dest_cc}    ${dest_cc_string}
+
+Positive_bill_payment_cc
+    [Arguments]    ${dest_cc}    ${transfer_amount}
+    Open_bill_payment
+    Select_credit_card
+    Fill_in_credit_card_details    ${dest_cc}    ${transfer_amount}
+    #Validate_pay_to_cc_confirm_page    ${dest_cc}    ${transfer_amount}
+    Continue_submit_iOS    ${submit_cc_bp_button_obj}

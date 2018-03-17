@@ -1,0 +1,22 @@
+*** Keywords ***
+open_xl
+    [Arguments]    ${xl_path}
+    Open Excel    ${xl_path}
+
+copy_xl_to_list
+    [Arguments]    ${xl_sheetname}
+    ${totalRow}=    Get Row Count    ${xl_sheetname}
+    #@{list}    Create List    ${EMPTY}
+    #${i}    Set Variable    0
+    #${j}    Set Variable    0
+    : FOR    ${i}    IN RANGE    0    ${totalRow}
+    \    read_a_row    ${i}
+
+read_a_row
+    [Arguments]    ${xl_row}
+    ${totalColumn}=    Get Column Count    ${xl_sheetname}
+    #${i}    Set Variable    0
+    ${list}    Create List    ${EMPTY}
+    : FOR    ${i}    IN RANGE    0    ${totalColumn}
+    \    ${data}=    Read Cell Data By Coordinates    ${xl_sheetname}    ${i}    ${xl_row}
+    \    Append To List    ${list}    ${data}

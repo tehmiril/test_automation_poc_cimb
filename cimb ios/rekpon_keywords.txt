@@ -1,0 +1,59 @@
+*** Keywords ***
+RekPon_Validate_Balance
+    [Arguments]    ${userID}    ${balance}
+    Open Android CIMB app
+    Wait Until Keyword Succeeds    15s    5s    Element Should Be Visible    class=android.widget.EditText
+    Input Text    class=android.widget.EditText    ${userID}
+    Click Element    //*[@text="LOGIN"]
+
+Positive_rekpon_transfer_to_other_rekpon
+    [Arguments]    ${user_id}    ${dest_num}    ${transfer_amount}
+    Login_app    ${user_id}
+    Open_transfer
+    Select_transfer_to_other_RekPon
+    Fill_in_transfer_RekPon_details    ${dest_num}    ${transfer_amount}
+    Validate_transfer_RekPon_confirm_page    ${dest_num}    ${transfer_amount}
+    Continue_submit
+
+Positive_rekpon_transfer_to_other_rekpon2
+    [Arguments]    ${dest_num}    ${transfer_amount}
+    Open_transfer
+    Select_transfer_to_other_RekPon
+    Fill_in_transfer_RekPon_details    ${dest_num}    ${transfer_amount}
+    #Validate_transfer_RekPon_confirm_page    ${dest_num}    ${transfer_amount}
+    Continue_submit_ios    ${confirm_button_obj}
+
+Open_transfer
+    Click Element    ${transfer_menu_button_obj}
+    Wait Until Keyword Succeeds    10s    2s    Page Should Contain Text    Transfer    #Element Should Be Visible    ${transfer_menu_button_obj}
+
+Select_transfer_to_other_RekPon
+    Click Element    ${transfer_to_rekpon_obj}    #//android.widget.TextView[@text="Transfer to Rekening Ponsel"]
+    Wait Until Keyword Succeeds    10s    2s    Page Should Contain Text    Transfer    #Element Should Be Visible    ${transfer_menu_button_obj}
+    #Log Source
+
+Fill_in_transfer_RekPon_details
+    [Arguments]    ${dest_num}    ${transfer_amount}
+    Click Element    ${rekpon_dest_obj}    #//android.widget.EditText[@text="Enter Mobile number"]
+    Input Text    ${rekpon_dest_obj}    ${dest_num}    #085349251023
+    Hide Keyboard
+    Click Element    ${rekpon_amount_obj}    #//android.widget.EditText[@text="Enter amount"]
+    Input Text    ${rekpon_amount_obj}    ${transfer_amount}    #10000
+    Hide Keyboard
+    Capture Page Screenshot    transfer_rekpon_details1.png
+    #Input Text    //android.widget.TextView[@text="Enter Description (optional)"]    testaut
+    #Hide Keyboard
+    Swipe_down_until_element_ios    ${next_transfer_rekpon_obj}    #//android.widget.Button[@text="NEXT"]
+    Click Element    ${next_transfer_rekpon_obj}    #//android.widget.Button[@text="NEXT"]
+    Wait Until Keyword Succeeds    10s    2s    Page Should Contain Text    Confirm    #Element Should Be Visible    //android.widget.TextView[@text="Confirm"]
+    Capture Page Screenshot    transfer_rekpon_confirm.png
+    #Log Source
+
+Validate_transfer_RekPon_confirm_page
+    [Arguments]    ${dest_num}    ${transfer_amount}
+    Swipe_down_until_element    //android.widget.TextView[@text="AMOUNT"]
+    #maybe perform more validation here
+    Get_mobile_number_dest_for_validation    //android.widget.TextView[@text="TRANSFER TO"]/following-sibling::*/descendant::android.widget.TextView[@text="ACCOUNT NUMBER"]/following-sibling::android.widget.TextView
+    Get_amount_for_validation    //android.widget.TextView[@text="AMOUNT"]/following-sibling::android.widget.TextView
+    Should Be Equal As Integers    ${current_element_amount}    ${transfer_amount}
+    Should Be Equal As Integers    ${current_element_dest_num}    ${dest_num}

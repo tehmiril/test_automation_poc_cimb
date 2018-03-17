@@ -1,0 +1,140 @@
+*** Keywords ***
+Open IOS CIMB app
+    ${ios_CIMB_app}=    Open Application    ${iosappiumServer}    platformName=${iosplatformName}    platformVersion=${iosVersion}    deviceName=${iosdeviceName}    bundleId=${bundleID}
+    ...    udid=${UDID1}    automationName=${iosautomationName}    usePrebuiltWDA=True    #newCommandTimeout=10000
+    #Sleep    10s
+    Wait Until Keyword Succeeds    10s    2s    Element Should Be Visible    ${textbox_login_obj}
+    Set Suite Variable    ${ios_CIMB_app}    ${ios_CIMB_app}
+
+Open Android CIMB app
+    ${CIMB_app}=    Open Application    ${androidappiumServer}    platformName=${androidplatformName}    platformVersion=${androidVersion}    deviceName=${androiddeviceName}    appPackage=${androidappPackage}
+    ...    appActivity=${androidappName}    noReset=true    automationName=UiAutomator2
+    Wait Until Keyword Succeeds    15s    3s    Element Should Be Visible    ${textbox_login_obj}
+    Set Suite Variable    ${CIMB_app}    ${CIMB_app}
+
+Login_app
+    [Arguments]    ${user_id}
+    Click Element    ${textbox_login_obj}
+    Input Text    ${textbox_login_obj}    ${user_id}
+    Hide Keyboard
+    Element Should Be Enabled    ${login_button_obj}
+    Click Element    ${login_button_obj}
+    Wait Until Keyword Succeeds    10s    2s    Element Should Be Visible    ${otp_main_label}    #//android.widget.TextView[@text="Passcode"]
+    ${status_otp}    Run Keyword And Return Status    Page Should Contain Text    We have sent you a one time passcode for ${user_id}
+    Capture Page Screenshot    otp_sent.png
+    Run Keyword If    ${status_otp}==${FALSE}    Fail    No OTP
+    Get_OTP
+    Click Element    ${otp_login_obj}
+    Input Text    ${otp_login_obj}    ${current_element_otp}
+    #Click Element    //android.widget.ViewFlipper/descendant::android.widget.EditText[@text=""]
+    #Input Text    //android.widget.ViewFlipper/descendant::android.widget.EditText[@text=""]    ${current_element_otp}
+    Hide Keyboard
+    Click Element    ${submit_otp_button_obj}
+    Wait Until Keyword Succeeds    10s    2s    Page Should Contain Text    ${user_id}    #Element Should Be Visible    //android.widget.TextView[@text="${user_id}"]
+    #Log Source
+
+Logout_app
+    #Click Element    ${open_left_menu_button_obj}    #//android.widget.Button[@text="x"]
+    #Wait Until Keyword Succeeds    10s    2s    Page Should Contain Text    Home    #Element Should Be Visible    //android.widget.TextView[@text="Home"]
+    #Swipe_down_until_element    ${logout_obj}    #//android.widget.TextView[@text="Log Out"]
+    Click Element    ${logout_obj}    #//android.widget.TextView[@text="Log Out"]
+    Wait Until Keyword Succeeds    10s    2s    Page Should Contain Text    Are you sure you want to log out?    #Element Should Be Visible    //android.widget.TextView[@text="Are you sure you want to log out?"]
+    Click Element    ${logout_yes_obj}    #//android.widget.Button[@text="YES"]
+    Sleep    2s
+    #Log Source
+    ${feedback_status}    Run Keyword And Return Status    Page Should Contain Text    You have successfully logged out    #Element Should Be Visible    //android.widget.TextView[@text="You have successfully logged out"]
+    Log Source
+    Run Keyword If    ${feedback_status}    Click Element    ${skip_feedback_obj}    #//android.widget.Button[@text="Skip"]
+    Wait Until Keyword Succeeds    15s    3s    Element Should Be Visible    ${textbox_login_obj}
+
+Swipe_down_until_element
+    [Arguments]    ${element}
+    : FOR    ${loop}    IN RANGE    0    10
+    \    Swipe    600    600    600    300
+    \    ${count_element}    Get Matching Xpath Count    ${element}
+    \    Run Keyword If    ${count_element}==1    Run Keywords    Log    Stop swipe down
+    \    ...    AND    Exit For Loop
+
+Swipe_down_until_element_ios
+    [Arguments]    ${element}
+    : FOR    ${loop}    IN RANGE    0    10
+    \    Swipe    ${50}    ${200}    ${0}    ${-50}    ${300}
+    \    ${count_element}    Run Keyword And Return Status    Element Should Be Visible    ${element}
+    \    Run Keyword If    ${count_element}    Run Keywords    Log    Stop swipe down
+    \    ...    AND    Exit For Loop
+
+Get_amount_for_validation
+    [Arguments]    ${element}
+    ${full_amount_shown}    Get Text    ${element}
+    ${full_amount_string}    Convert To String    ${full_amount_shown}
+    ${elements_amount}    Split String    ${full_amount_string}    .
+    #Get the first from the list
+    ${amount_first}    Get From List    ${elements_amount}    0
+    ${finalelement_amount}    Strip String    ${amount_first}    characters=IDR${SPACE}
+    ${finalelement_amount2}    Remove String Using Regexp    ${finalelement_amount}    [,]
+    Set Suite Variable    ${current_element_amount}    ${finalelement_amount2}
+
+Get_mobile_number_dest_for_validation
+    [Arguments]    ${element}
+    ${dest_number_rekpon}    Get Text    ${element}
+    ${dest_number_rekpon_string}    Convert To String    ${dest_number_rekpon}
+    ${dest_number_rekpon_string2}    Replace String Using Regexp    ${dest_number_rekpon_string}    ^62    0
+    Set Suite Variable    ${current_element_dest_num}    ${dest_number_rekpon_string2}
+
+Continue_submit_Android
+    [Arguments]    ${element}
+    Click Element    ${submit_cc_bp_button_obj}    #//android.widget.Button[@text="CONFIRM"]
+    Wait Until Keyword Succeeds    10s    2s    Page Should Contain Text    Enter Go Mobile PIN    #Element Should Be Visible    //android.widget.TextView[@text="Enter Go Mobile PIN"]
+    #Log Source
+    ${command_pin}    Get Text    ${titel_enter_pin_obj}    #//android.widget.TextView[contains(@text,"Enter the")]
+    ${user_pin_string}    Convert To String    ${mpin}
+    ${user_pin}    Split String    ${user_pin_string}    ;
+    ${command_pin_string}    Convert To String    ${command_pin}
+    ${command_pin_string2}    Remove String    ${command_pin_string}    Enter the${SPACE}    ${SPACE}digit of your Go Mobile PIN
+    ${elements_pin}    Split String    ${command_pin_string2}    ${SPACE}and${SPACE}
+    ${pin_first}    Get From List    ${elements_pin}    0
+    ${pin_first_index}    Evaluate    ${pin_first}-1
+    ${pin_second}    Get From List    ${elements_pin}    1
+    ${pin_second_index}    Evaluate    ${pin_second}-1
+    ${enter_first_pin}    Get From List    ${user_pin}    ${pin_first_index}
+    ${enter_second_pin}    Get From List    ${user_pin}    ${pin_second_index}
+    Click Element    //android.widget.Button[@text="${enter_first_pin}"]
+    Click Element    //android.widget.Button[@text="${enter_second_pin}"]
+    Click Element    //android.widget.Button[@text="SUBMIT"]
+    #Sleep    5s
+    Wait Until Keyword Succeeds    10s    2s    Element Should Be Visible    //android.widget.TextView[@text="Transaction Successful"]
+    #maybe perform more validation here
+    Sleep    3s
+    #Go back to main page
+    Click Element    //android.widget.Button[@text="Close"]
+    Wait Until Keyword Succeeds    10s    2s    Element Should Be Visible    //android.widget.TextView[@text="${user_id}"]
+
+Continue_submit_iOS
+    [Arguments]    ${element}
+    Click Element    ${element}    #${confirm_button_obj}    #//android.widget.Button[@text="CONFIRM"]
+    Wait Until Keyword Succeeds    10s    2s    Page Should Contain Text    Enter Go Mobile PIN    #Element Should Be Visible    //android.widget.TextView[@text="Enter Go Mobile PIN"]
+    ${command_pin}    Get Text    ${titel_enter_pin_obj}    #//android.widget.TextView[contains(@text,"Enter the")]
+    ${user_pin_string}    Convert To String    ${mpin}
+    ${user_pin}    Split String    ${user_pin_string}    ;
+    ${command_pin_string}    Convert To String    ${command_pin}
+    ${command_pin_string2}    Remove String    ${command_pin_string}    Enter the${SPACE}    ${SPACE}digit of your Go Mobile PIN
+    ${elements_pin}    Split String    ${command_pin_string2}    ${SPACE}and${SPACE}
+    ${pin_first}    Get From List    ${elements_pin}    0
+    ${pin_first_index}    Evaluate    ${pin_first}-1
+    ${pin_second}    Get From List    ${elements_pin}    1
+    ${pin_second_index}    Evaluate    ${pin_second}-1
+    ${enter_first_pin}    Get From List    ${user_pin}    ${pin_first_index}
+    ${enter_second_pin}    Get From List    ${user_pin}    ${pin_second_index}
+    ${first_pin}=    Set Variable    btn${enter_first_pin}
+    ${second_pin}=    Set Variable    btn${enter_second_pin}
+    Click Element    accessibility_id=${first_pin}    #//android.widget.Button[@text="${enter_first_pin}"]
+    Click Element    accessibility_id=${second_pin}    #//android.widget.Button[@text="${enter_second_pin}"]
+    Click Element    ${submit_cc_bp_button_obj}    #//android.widget.Button[@text="SUBMIT"]
+    #Sleep    5s
+    Wait Until Keyword Succeeds    15s    3s    Element Should Be Visible    ${complete_transaction_button_obj}    #//android.widget.TextView[@text="Transaction Successful"]
+    #maybe perform more validation here
+    Sleep    3s
+    #Log Source
+    #Go back to main page
+    Click Element    ${close_success_transaction}    #//android.widget.Button[@text="Close"]
+    Wait Until Keyword Succeeds    10s    2s    Page Should Contain Text    ${user_id}    #Element Should Be Visible    //android.widget.TextView[@text="${user_id}"]
