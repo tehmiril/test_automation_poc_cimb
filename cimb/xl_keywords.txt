@@ -1,0 +1,27 @@
+*** Keywords ***
+open_xl
+    [Arguments]    ${xl_path}
+    Open Excel    ${xl_path}
+
+Read_RF_Keywords_Data
+    [Arguments]    ${xl_sheetname}
+    ${totalRow}=    Get Row Count    ${xl_sheetname}
+    : FOR    ${i}    IN RANGE    1    ${totalRow}
+    \    ${RF_keyword}=    Read Cell Data By Coordinates    ${xl_sheetname}    2    ${i}
+    \    Run Keyword If    '${RF_keyword}'=='Login_app'    Get_user_ID
+    #Log    ${mlist}
+
+Get_data_per_column
+    [Arguments]    ${xl_sheetname}    ${xl_row}
+    ${totalColumn}=    Get Column Count    ${xl_sheetname}
+    #${i}    Set Variable    0
+    ${list}    Create List    ${EMPTY}
+    : FOR    ${i}    IN RANGE    2    ${totalColumn}
+    \    Log    col:${i};row:${xl_row}
+    \    ${data}=    Read Cell Data By Coordinates    ${xl_sheetname}    ${i}    ${xl_row}
+    \    Run Keyword If    '${data}'=='${EMPTY}'    Log    No!
+    \    ...    ELSE    Append To List    ${list}    ${data}
+    #Set Suite Variable    ${mlist}    ${list}
+
+Get_user_ID
+    Set Suite Variable    ${mlist}    ${list}

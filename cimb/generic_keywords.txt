@@ -68,3 +68,14 @@ Get_mobile_number_dest_for_validation
     ${dest_number_rekpon_string}    Convert To String    ${dest_number_rekpon}
     ${dest_number_rekpon_string2}    Replace String Using Regexp    ${dest_number_rekpon_string}    ^62    0
     Set Suite Variable    ${current_element_dest_num}    ${dest_number_rekpon_string2}
+
+Check_which_page_for_error
+    Run Keyword If    '${current_page}'=='fill_in_rekpon_transfer_rekpon'    Error_rekpon_transfer_rekpon
+
+Error_rekpon_transfer_rekpon
+    ${error_visible}    Run Keyword And Return Status    Page Should Contain Text    Your beneficiary
+    Run Keyword If    ${error_visible}    Run Keywords    Click Element    //android.widget.Button[@text="NO"]
+    ...    AND    Click Element    //android.widget.Button[@text="C"]
+    Click Element    //android.widget.Button[@text="x"]
+    Wait Until Keyword Succeeds    10s    2s    Element Should Be Visible    //android.widget.TextView[@text="Home"]
+    Click Element    //android.widget.TextView[@text="Home"]

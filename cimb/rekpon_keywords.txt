@@ -6,15 +6,6 @@ RekPon_Validate_Balance
     Input Text    class=android.widget.EditText    ${userID}
     Click Element    //*[@text="LOGIN"]
 
-Positive_rekpon_transfer_to_other_rekpon
-    [Arguments]    ${user_id}    ${dest_num}    ${transfer_amount}
-    Login_app    ${user_id}
-    Open_transfer
-    Select_transfer_to_other_RekPon
-    Fill_in_transfer_RekPon_details    ${dest_num}    ${transfer_amount}
-    Validate_transfer_RekPon_confirm_page    ${dest_num}    ${transfer_amount}
-    Continue_submit
-
 Positive_rekpon_transfer_to_other_rekpon2
     [Arguments]    ${dest_num}    ${transfer_amount}
     Open_transfer
@@ -33,6 +24,7 @@ Select_transfer_to_other_RekPon
 
 Fill_in_transfer_RekPon_details
     [Arguments]    ${dest_num}    ${transfer_amount}
+    Set Suite Variable    ${current_page}    fill_in_rekpon_transfer_rekpon
     Click Element    //android.widget.EditText[@text="Enter Mobile number"]
     Input Text    //android.widget.EditText[@text="Enter Mobile number"]    ${dest_num}    #085349251023
     Hide Keyboard
