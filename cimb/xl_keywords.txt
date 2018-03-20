@@ -5,11 +5,19 @@ open_xl
 
 Read_RF_Keywords_Data
     [Arguments]    ${xl_sheetname}
+    Create_RF_Dictionary
+    ${FILE_CONTENT_SETTINGS}=    Get File    settings_template.txt
+    ${full_content_string}    Convert To String    ${FILE_CONTENT_SETTINGS}
+    Set Suite Variable    ${eo_excel}    ${FALSE}
     ${totalRow}=    Get Row Count    ${xl_sheetname}
     : FOR    ${i}    IN RANGE    1    ${totalRow}
-    \    ${RF_keyword}=    Read Cell Data By Coordinates    ${xl_sheetname}    2    ${i}
-    \    Run Keyword If    '${RF_keyword}'=='Login_app'    Get_user_ID
+    \    Get_value_B_column    ${xl_sheetname}    ${i}
+    \    Run Keyword If    ${eo_excel}    Exit For Loop
     #Log    ${mlist}
+    ${full_content_string2}=    Replace String    ${full_content_string}    <userID>    ${userID}
+    ${full_content_string3}=    Replace String    ${full_content_string2}    <dynamic>    ${test_case_content}
+    Create File    test1.robot    ${full_content_string3}
+    #Log Dictionary    ${dict_keywords}
 
 Get_data_per_column
     [Arguments]    ${xl_sheetname}    ${xl_row}
@@ -25,3 +33,57 @@ Get_data_per_column
 
 Get_user_ID
     Set Suite Variable    ${mlist}    ${list}
+
+Get_value_B_column
+    [Arguments]    ${xl_sheetname}    ${xl_row}
+    Check_dictionary_if_empty
+    ${test_case_name}=    Read Cell Data By Coordinates    ${xl_sheetname}    1    ${xl_row}
+    Run Keyword If    '${test_case_name}'!='${EMPTY}' and ${dict_empty}    Set Suite Variable    ${current_test_case_name}    ${test_case_name}
+    ...    ELSE IF    '${test_case_name}'!='${EMPTY}' and ${dict_empty}==${FALSE}    Populate_test_case    #Log Dictionary    ${dict_keywords}
+    Get_value_C_column    ${xl_sheetname}    ${xl_row}
+
+Get_value_C_column
+    [Arguments]    ${xl_sheetname}    ${xl_row}
+    ${RF_custom_keyword_name}=    Read Cell Data By Coordinates    ${xl_sheetname}    2    ${xl_row}
+    Run Keyword If    '${RF_custom_keyword_name}'=='${EMPTY}'    Set Suite Variable    ${eo_excel}    ${TRUE}
+    ...    ELSE IF    '${RF_custom_keyword_name}'=='Login_app'    Get_user_login    ${xl_sheetname}    ${xl_row}
+    ...    ELSE IF    '${RF_custom_keyword_name}'!='Logout_app'    Get_value_D_column    ${xl_sheetname}    ${xl_row}    ${RF_custom_keyword_name}
+
+Get_value_D_column
+    [Arguments]    ${xl_sheetname}    ${xl_row}    ${RF_custom_keyword_name}
+    ${data_values}=    Read Cell Data By Coordinates    ${xl_sheetname}    3    ${xl_row}
+    ${data_values_string}    Convert To String    ${data_values}
+    ${results}=    Split String    ${data_values_string}    ;
+    ${total}=    Get Length    ${results}
+    Set To Dictionary    ${dict_keywords}    '${xl_row}'=${RF_custom_keyword_name};${data_values}
+
+Get_user_login
+    [Arguments]    ${xl_sheetname}    ${xl_row}
+    ${data_values}=    Read Cell Data By Coordinates    ${xl_sheetname}    3    ${xl_row}
+    Set Suite Variable    ${userID}    ${data_values}
+
+Populate_test_case
+    ${length} =    Get Length    ${dict_keywords}
+    Log Dictionary    ${dict_keywords}
+    ${FILE_CONTENT_TEST_CASE}=    Get File    test_case_template.txt
+    ${full_content_tc_string}    Convert To String    ${FILE_CONTENT_TEST_CASE}
+    ${full_string}=    Set Variable
+    : FOR    ${key}    IN    @{dict_keywords.keys()}
+    \    ${value}=    Get From Dictionary    ${dict_keywords}    ${key}
+    \    ${value_string}    Convert To String    ${value}
+    \    ${new_value_string}    Replace String    ${value_string}    ;    \t
+    \    ${full_string}=    Set Variable    ${full_string}\n\t${new_value_string}
+    ${full_content_string2}=    Replace String    ${full_content_tc_string}    <test_case_name>    ${current_test_case_name}
+    ${full_content_string3}=    Replace String    ${full_content_string2}    <RF_keywords>    ${full_string}
+    Set Suite Variable    ${test_case_content}    ${full_content_string3}
+    #Create File    test1.robot    ${full_content_string3}
+
+Create_RF_Dictionary
+    ${dict_keywords}    Create Dictionary
+    Set Suite Variable    \${dict_keywords}
+    Set Suite Variable    ${dict_empty}    ${TRUE}
+
+Check_dictionary_if_empty
+    ${length} =    Get Length    ${dict_keywords}
+    Run Keyword If    ${length}==0    Set Suite Variable    ${dict_empty}    ${TRUE}
+    ...    ELSE    Set Suite Variable    ${dict_empty}    ${FALSE}
