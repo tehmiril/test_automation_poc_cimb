@@ -1,6 +1,7 @@
 *** Settings ***
 Suite Setup       Run Keywords    Open Android CIMB app
 ...               AND    Login_app    <userID>
+Resource          test_data_Android.txt
 Suite Teardown    Logout_app
 Test Teardown     Run Keyword If Test Failed    Check_which_page_for_error
 Library           AppiumLibrary
