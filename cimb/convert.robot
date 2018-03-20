@@ -9,5 +9,5 @@ Resource          xl_keywords.txt
 Test_excel
     Log    ${CURDIR}
     ${sheets}    Set Variable    Test_Scenario
-    Open Excel    Automation Manual Test Script and Test Data v.1.xls
+    Open Excel    ${excel_path}
     Read_RF_Keywords_Data    ${sheets}
