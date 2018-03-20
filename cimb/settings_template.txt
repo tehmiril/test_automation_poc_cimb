@@ -1,8 +1,8 @@
 *** Settings ***
-Test Setup        Run Keywords    Open Android CIMB app
+Suite Setup       Run Keywords    Open Android CIMB app
 ...               AND    Login_app    <userID>
-Test Teardown     Run Keywords		Logout_app    
-...				  AND	Close Application
+Suite Teardown    Logout_app
+Test Teardown     Run Keyword If Test Failed    Check_which_page_for_error
 Library           AppiumLibrary
 Resource          rekpon_keywords.txt
 Resource          generic_keywords.txt
@@ -14,6 +14,4 @@ Resource          Object_repo_CIMB_Android.txt
 Resource          bill_payment_keywords.txt
 
 *** Test Cases ***
-<test_case_name>
-	<RF_keywords>
-    [Teardown]    Run Keyword If Test Failed    Check_which_page_for_error
+<dynamic>
