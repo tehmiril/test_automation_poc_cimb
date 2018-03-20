@@ -5,6 +5,7 @@ open_xl
 
 Read_RF_Keywords_Data
     [Arguments]    ${xl_sheetname}
+    Set Suite Variable    ${test_case_populated}    ${FALSE}
     Create_RF_Dictionary
     ${FILE_CONTENT_SETTINGS}=    Get File    settings_template.txt
     ${full_content_string}    Convert To String    ${FILE_CONTENT_SETTINGS}
@@ -12,7 +13,7 @@ Read_RF_Keywords_Data
     ${totalRow}=    Get Row Count    ${xl_sheetname}
     : FOR    ${i}    IN RANGE    1    ${totalRow}
     \    Get_value_B_column    ${xl_sheetname}    ${i}
-    \    Run Keyword If    ${eo_excel}    Exit For Loop
+    \    Run Keyword If    ${eo_excel} and ${test_case_populated}    Exit For Loop
     #Log    ${mlist}
     ${full_content_string2}=    Replace String    ${full_content_string}    <userID>    ${userID}
     ${full_content_string3}=    Replace String    ${full_content_string2}    <dynamic>    ${test_case_content}
@@ -39,7 +40,8 @@ Get_value_B_column
     Check_dictionary_if_empty
     ${test_case_name}=    Read Cell Data By Coordinates    ${xl_sheetname}    1    ${xl_row}
     Run Keyword If    '${test_case_name}'!='${EMPTY}' and ${dict_empty}    Set Suite Variable    ${current_test_case_name}    ${test_case_name}
-    ...    ELSE IF    '${test_case_name}'!='${EMPTY}' and ${dict_empty}==${FALSE}    Populate_test_case    #Log Dictionary    ${dict_keywords}
+    ...    ELSE IF    '${test_case_name}'!='${EMPTY}' and ${dict_empty}==${FALSE}    Populate_test_case
+    ...    ELSE IF    '${test_case_name}'=='${EMPTY}' and ${dict_empty}==${FALSE} and ${eo_excel}    Populate_test_case
     Get_value_C_column    ${xl_sheetname}    ${xl_row}
 
 Get_value_C_column
@@ -76,6 +78,7 @@ Populate_test_case
     ${full_content_string2}=    Replace String    ${full_content_tc_string}    <test_case_name>    ${current_test_case_name}
     ${full_content_string3}=    Replace String    ${full_content_string2}    <RF_keywords>    ${full_string}
     Set Suite Variable    ${test_case_content}    ${full_content_string3}
+    Set Suite Variable    ${test_case_populated}    ${TRUE}
     #Create File    test1.robot    ${full_content_string3}
 
 Create_RF_Dictionary
