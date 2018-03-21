@@ -42,6 +42,7 @@ Get_value_B_column
     Run Keyword If    '${test_case_name}'!='${EMPTY}' and ${dict_empty}    Set Suite Variable    ${current_test_case_name}    ${test_case_name}
     ...    ELSE IF    '${test_case_name}'!='${EMPTY}' and ${dict_empty}==${FALSE}    Populate_test_case
     ...    ELSE IF    '${test_case_name}'=='${EMPTY}' and ${dict_empty}==${FALSE} and ${eo_excel}    Populate_test_case
+    ...    ELSE IF    '${test_case_name}'=='${EMPTY}' and ${dict_empty}==${FALSE} and ${eo_excel}==${FALSE}    Populate_test_case
     Get_value_C_column    ${xl_sheetname}    ${xl_row}
 
 Get_value_C_column
