@@ -1,7 +1,7 @@
 *** Keywords ***
 Open IOS CIMB app
     ${ios_CIMB_app}=    Open Application    ${iosappiumServer}    platformName=${iosplatformName}    platformVersion=${iosVersion}    deviceName=${iosdeviceName}    bundleId=${bundleID}
-    ...    udid=${UDID1}    automationName=${iosautomationName}    #usePrebuiltWDA=True    #newCommandTimeout=10000
+    ...    udid=${UDID1}    automationName=${iosautomationName}    preventWDAAttachments=True		#usePrebuiltWDA=True    #newCommandTimeout=10000
     #Sleep    10s
     Wait Until Keyword Succeeds    6s    2s    Element Should Be Visible    ${textbox_login_obj}
     Set Suite Variable    ${ios_CIMB_app}    ${ios_CIMB_app}
