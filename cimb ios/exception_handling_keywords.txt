@@ -1,0 +1,20 @@
+*** Keywords ***
+Check_which_page_for_error
+    Run Keyword If    '${current_page}'=='fill_in_rekpon_transfer_rekpon'    Error_rekpon_transfer_rekpon
+    ...    ELSE IF    '${current_page}'=='fill_in_bp_cc_rekpon'    Error_bp_cc
+
+Error_rekpon_transfer_rekpon
+    ${error_visible}    Run Keyword And Return Status    Page Should Contain Text    Your beneficiary
+    Run Keyword If    ${error_visible}    Run Keywords    Click Element    accessibility_id=btnNo
+    ...    AND    Click Element    accessibility_id=btnBack
+    Click Element    ${open_left_menu_button_obj}
+    Wait Until Keyword Succeeds    6s    2s    Page Should Contain Text    Home
+    Click Element    ${home_button_left_panel_obj}
+
+Error_bp_cc
+    ${error_visible}    Run Keyword And Return Status    Page Should Contain Text    Invalid Card Number
+    Run Keyword If    ${error_visible}    Run Keywords    Click Element    accessibility_id=btnAgree
+    ...    AND    Click Element    accessibility_id=btnBack
+    Click Element    ${open_left_menu_button_obj}
+    Wait Until Keyword Succeeds    6s    2s    Page Should Contain Text    Home
+    Click Element    ${home_button_left_panel_obj}

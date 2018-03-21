@@ -26,3 +26,4 @@ ${rekpon_amount_obj}    accessibility_id=txtFieldEnterAmount
 ${next_transfer_rekpon_obj}    accessibility_id=btnNext
 ${confirm_button_obj}    accessibility_id=btnConfirm
 ${complete_transaction_button_obj}    accessibility_id=btnComplete
+${home_button_left_panel_obj}    accessibility_id=flxSubHome

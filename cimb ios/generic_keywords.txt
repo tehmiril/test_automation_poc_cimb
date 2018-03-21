@@ -1,15 +1,15 @@
 *** Keywords ***
 Open IOS CIMB app
     ${ios_CIMB_app}=    Open Application    ${iosappiumServer}    platformName=${iosplatformName}    platformVersion=${iosVersion}    deviceName=${iosdeviceName}    bundleId=${bundleID}
-    ...    udid=${UDID1}    automationName=${iosautomationName}    usePrebuiltWDA=True    #newCommandTimeout=10000
+    ...    udid=${UDID1}    automationName=${iosautomationName}    #usePrebuiltWDA=True    #newCommandTimeout=10000
     #Sleep    10s
-    Wait Until Keyword Succeeds    10s    2s    Element Should Be Visible    ${textbox_login_obj}
+    Wait Until Keyword Succeeds    6s    2s    Element Should Be Visible    ${textbox_login_obj}
     Set Suite Variable    ${ios_CIMB_app}    ${ios_CIMB_app}
 
 Open Android CIMB app
     ${CIMB_app}=    Open Application    ${androidappiumServer}    platformName=${androidplatformName}    platformVersion=${androidVersion}    deviceName=${androiddeviceName}    appPackage=${androidappPackage}
     ...    appActivity=${androidappName}    noReset=true    automationName=UiAutomator2
-    Wait Until Keyword Succeeds    15s    3s    Element Should Be Visible    ${textbox_login_obj}
+    Wait Until Keyword Succeeds    9s    3s    Element Should Be Visible    ${textbox_login_obj}
     Set Suite Variable    ${CIMB_app}    ${CIMB_app}
 
 Login_app
@@ -19,7 +19,7 @@ Login_app
     Hide Keyboard
     Element Should Be Enabled    ${login_button_obj}
     Click Element    ${login_button_obj}
-    Wait Until Keyword Succeeds    10s    2s    Element Should Be Visible    ${otp_main_label}    #//android.widget.TextView[@text="Passcode"]
+    Wait Until Keyword Succeeds    6s    2s    Element Should Be Visible    ${otp_main_label}    #//android.widget.TextView[@text="Passcode"]
     ${status_otp}    Run Keyword And Return Status    Page Should Contain Text    We have sent you a one time passcode for ${user_id}
     Capture Page Screenshot    otp_sent.png
     Run Keyword If    ${status_otp}==${FALSE}    Fail    No OTP
@@ -30,22 +30,21 @@ Login_app
     #Input Text    //android.widget.ViewFlipper/descendant::android.widget.EditText[@text=""]    ${current_element_otp}
     Hide Keyboard
     Click Element    ${submit_otp_button_obj}
-    Wait Until Keyword Succeeds    10s    2s    Page Should Contain Text    ${user_id}    #Element Should Be Visible    //android.widget.TextView[@text="${user_id}"]
-    #Log Source
+    Wait Until Keyword Succeeds    6s    2s    Page Should Contain Text    ${user_id}    #Element Should Be Visible    //android.widget.TextView[@text="${user_id}"]
 
 Logout_app
     #Click Element    ${open_left_menu_button_obj}    #//android.widget.Button[@text="x"]
     #Wait Until Keyword Succeeds    10s    2s    Page Should Contain Text    Home    #Element Should Be Visible    //android.widget.TextView[@text="Home"]
     #Swipe_down_until_element    ${logout_obj}    #//android.widget.TextView[@text="Log Out"]
     Click Element    ${logout_obj}    #//android.widget.TextView[@text="Log Out"]
-    Wait Until Keyword Succeeds    10s    2s    Page Should Contain Text    Are you sure you want to log out?    #Element Should Be Visible    //android.widget.TextView[@text="Are you sure you want to log out?"]
+    Wait Until Keyword Succeeds    6s    2s    Page Should Contain Text    Are you sure you want to log out?    #Element Should Be Visible    //android.widget.TextView[@text="Are you sure you want to log out?"]
     Click Element    ${logout_yes_obj}    #//android.widget.Button[@text="YES"]
     Sleep    2s
     #Log Source
     ${feedback_status}    Run Keyword And Return Status    Page Should Contain Text    You have successfully logged out    #Element Should Be Visible    //android.widget.TextView[@text="You have successfully logged out"]
     Log Source
     Run Keyword If    ${feedback_status}    Click Element    ${skip_feedback_obj}    #//android.widget.Button[@text="Skip"]
-    Wait Until Keyword Succeeds    15s    3s    Element Should Be Visible    ${textbox_login_obj}
+    Wait Until Keyword Succeeds    9s    3s    Element Should Be Visible    ${textbox_login_obj}
 
 Swipe_down_until_element
     [Arguments]    ${element}
@@ -58,7 +57,7 @@ Swipe_down_until_element
 Swipe_down_until_element_ios
     [Arguments]    ${element}
     : FOR    ${loop}    IN RANGE    0    10
-    \    Swipe    ${50}    ${200}    ${0}    ${-50}    ${300}
+    \    Swipe    ${50}    ${200}    ${0}    ${-100}    ${100}
     \    ${count_element}    Run Keyword And Return Status    Element Should Be Visible    ${element}
     \    Run Keyword If    ${count_element}    Run Keywords    Log    Stop swipe down
     \    ...    AND    Exit For Loop
@@ -112,7 +111,7 @@ Continue_submit_Android
 Continue_submit_iOS
     [Arguments]    ${element}
     Click Element    ${element}    #${confirm_button_obj}    #//android.widget.Button[@text="CONFIRM"]
-    Wait Until Keyword Succeeds    10s    2s    Page Should Contain Text    Enter Go Mobile PIN    #Element Should Be Visible    //android.widget.TextView[@text="Enter Go Mobile PIN"]
+    Wait Until Keyword Succeeds    6s    2s    Page Should Contain Text    Enter Go Mobile PIN    #Element Should Be Visible    //android.widget.TextView[@text="Enter Go Mobile PIN"]
     ${command_pin}    Get Text    ${titel_enter_pin_obj}    #//android.widget.TextView[contains(@text,"Enter the")]
     ${user_pin_string}    Convert To String    ${mpin}
     ${user_pin}    Split String    ${user_pin_string}    ;
@@ -131,10 +130,10 @@ Continue_submit_iOS
     Click Element    accessibility_id=${second_pin}    #//android.widget.Button[@text="${enter_second_pin}"]
     Click Element    ${submit_cc_bp_button_obj}    #//android.widget.Button[@text="SUBMIT"]
     #Sleep    5s
-    Wait Until Keyword Succeeds    15s    3s    Element Should Be Visible    ${complete_transaction_button_obj}    #//android.widget.TextView[@text="Transaction Successful"]
+    Wait Until Keyword Succeeds    9s    3s    Element Should Be Visible    ${complete_transaction_button_obj}    #//android.widget.TextView[@text="Transaction Successful"]
     #maybe perform more validation here
     Sleep    3s
     #Log Source
     #Go back to main page
     Click Element    ${close_success_transaction}    #//android.widget.Button[@text="Close"]
-    Wait Until Keyword Succeeds    10s    2s    Page Should Contain Text    ${user_id}    #Element Should Be Visible    //android.widget.TextView[@text="${user_id}"]
+    Wait Until Keyword Succeeds    6s    2s    Page Should Contain Text    ${user_id}    #Element Should Be Visible    //android.widget.TextView[@text="${user_id}"]

@@ -1,14 +1,15 @@
 *** Keywords ***
 Open_bill_payment
     Click Element    ${bill_payment_menu_button_obj}
-    Wait Until Keyword Succeeds    10s    2s    Page Should Contain Text    Bill Payment    #Element Should Be Visible    ${bill_payment_menu_button_obj}
+    Wait Until Keyword Succeeds    6s    2s    Page Should Contain Text    Bill Payment    #Element Should Be Visible    ${bill_payment_menu_button_obj}
 
 Select_credit_card
     Click Element    ${credit_card_bill_payment_obj}    #//android.widget.TextView[@text="Credit Card"]
-    Wait Until Keyword Succeeds    10s    2s    Page Should Contain Text    Credit Card    #Element Should Be Visible    //android.widget.TextView[@text="Credit Card"]
+    Wait Until Keyword Succeeds    6s    2s    Page Should Contain Text    Credit Card    #Element Should Be Visible    //android.widget.TextView[@text="Credit Card"]
 
 Fill_in_credit_card_details
     [Arguments]    ${dest_card}    ${transfer_amount}
+    Set Suite Variable    ${current_page}    fill_in_bp_cc_rekpon
     Click Element    ${cc_number_bill_payment_obj}    #//android.widget.EditText[@text="Enter Card Number"]
     Input Text    ${cc_number_bill_payment_obj}    ${dest_card}    #//android.widget.EditText[@text="Enter Card Number"]    5289190004452165
     Hide Keyboard
@@ -16,7 +17,7 @@ Fill_in_credit_card_details
     Input Text    ${cc_amount_bill_payment_obj}    ${transfer_amount}    #//android.widget.EditText[@text="Enter payment amount"]    10000
     Hide Keyboard
     Click Element    ${submit_cc_bp_button_obj}    #//android.widget.Button[@text="NEXT"]
-    Wait Until Keyword Succeeds    10s    2s    Page Should Contain Text    Confirm    #Element Should Be Visible    //android.widget.TextView[@text="Confirm"]
+    Wait Until Keyword Succeeds    6s    2s    Page Should Contain Text    Confirm    #Element Should Be Visible    //android.widget.TextView[@text="Confirm"]
     Capture Page Screenshot    transfer_cc_confirm.png
 
 Validate_pay_to_cc_confirm_page
