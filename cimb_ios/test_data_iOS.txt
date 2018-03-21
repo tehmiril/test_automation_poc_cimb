@@ -15,5 +15,5 @@ ${bundleID}       com.cimbniaga.CIMB
 ${usePrebuiltWDA}    True
 ${iosautomationName}    XCUITest
 #${UDID1}         3df3f20caab56f55dd21778d564473cf5e4e0dce
-#${UDID1}         a1e70a0d643b3de2b863eeb578ed140d6a9c2b50
+${UDID1}         a1e70a0d643b3de2b863eeb578ed140d6a9c2b50
 #${UDID1}          63fcfceac6b92f3f467078e074d8203f263589ea
