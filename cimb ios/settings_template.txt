@@ -1,0 +1,18 @@
+*** Settings ***
+Suite Setup       Run Keywords    Open IOS CIMB app
+...               AND    Login_app    <userID>
+Resource          test_data_iOS.txt
+Suite Teardown    Logout_app
+Test Teardown     Run Keyword If Test Failed    Check_which_page_for_error
+Library           AppiumLibrary
+Resource          rekpon_keywords.txt
+Resource          generic_keywords.txt
+Resource          SMS_keywords_Android.txt
+Resource          test_data_SMS_Android.txt
+Library           String
+Library           Collections
+Resource          Object_repo_CIMB_iOS.txt
+Resource          bill_payment_keywords.txt
+
+*** Test Cases ***
+<dynamic>

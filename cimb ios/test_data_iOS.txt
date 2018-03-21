@@ -5,7 +5,7 @@ ${iosdeviceName}    Accenture-Mac01's iPad    #Accenture-Mac01's iPhone    #Acce
 ${iosplatformName}    iOS
 ${iosappiumServer}    http://localhost:4723/wd/hub
 ${androidappName}    id.co.cimbniaga.mobile.android.GoMobile
-${userID}         testaut02
+#${userID}         testaut02
 ${mpin}           2;2;1;1;9;6
 ${rekpon_dest}    081314415099    #085349251023 \ \ 082110685202
 ${rekpon_transfer_balance}    10000
