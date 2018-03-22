@@ -29,7 +29,7 @@ Login_app
     #Input Text    //android.widget.ViewFlipper/descendant::android.widget.EditText[@text=""]    ${current_element_otp}
     Hide Keyboard
     Click Element    ${submit_otp_button_obj}
-    Wait Until Keyword Succeeds    10s    2s    Element Should Be Visible    //android.widget.TextView[@text="${user_id}"]
+    Wait Until Keyword Succeeds    20s    2s    Element Should Be Visible    //android.widget.TextView[@text="${user_id}"]
 
 Logout_app
     Click Element    //android.widget.Button[@text="x"]
@@ -77,5 +77,5 @@ Error_rekpon_transfer_rekpon
     Run Keyword If    ${error_visible}    Run Keywords    Click Element    //android.widget.Button[@text="NO"]
     ...    AND    Click Element    //android.widget.Button[@text="C"]
     Click Element    //android.widget.Button[@text="x"]
-    Wait Until Keyword Succeeds    10s    2s    Element Should Be Visible    //android.widget.TextView[@text="Home"]
+    Wait Until Keyword Succeeds    20s    2s    Element Should Be Visible    //android.widget.TextView[@text="Home"]
     Click Element    //android.widget.TextView[@text="Home"]
