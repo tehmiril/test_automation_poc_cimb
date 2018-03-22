@@ -7,7 +7,7 @@ Open IOS CIMB app
 Open Android CIMB app
     ${CIMB_app}=    Open Application    ${androidappiumServer}    platformName=${androidplatformName}    platformVersion=${androidVersion}    deviceName=${androiddeviceName}    appPackage=${androidappPackage}
     ...    appActivity=${androidappName}    noReset=true    automationName=UiAutomator2
-    Wait Until Keyword Succeeds    15s    3s    Element Should Be Visible    ${textbox_login_obj}
+    Wait Until Keyword Succeeds    30s    3s    Element Should Be Visible    ${textbox_login_obj}
     Set Suite Variable    ${CIMB_app}    ${CIMB_app}
     Capture Page Screenshot    C:/Users/amiril.r.faradini/Documents/Robot/logs/screenshot/login_page.png
 
@@ -18,7 +18,7 @@ Login_app
     Hide Keyboard
     Element Should Be Enabled    ${login_button_obj}
     Click Element    ${login_button_obj}
-    Wait Until Keyword Succeeds    10s    2s    Element Should Be Visible    //android.widget.TextView[@text="Passcode"]
+    Wait Until Keyword Succeeds    20s    2s    Element Should Be Visible    //android.widget.TextView[@text="Passcode"]
     ${status_otp}    Run Keyword And Return Status    Page Should Contain Text    We have sent you a one time passcode for ${user_id}
     Capture Page Screenshot    otp_sent.png
     Run Keyword If    ${status_otp}==${FALSE}    Fail    No OTP
@@ -33,15 +33,15 @@ Login_app
 
 Logout_app
     Click Element    //android.widget.Button[@text="x"]
-    Wait Until Keyword Succeeds    10s    2s    Element Should Be Visible    //android.widget.TextView[@text="Home"]
+    Wait Until Keyword Succeeds    20s    2s    Element Should Be Visible    //android.widget.TextView[@text="Home"]
     Swipe_down_until_element    //android.widget.TextView[@text="Log Out"]
     Click Element    //android.widget.TextView[@text="Log Out"]
-    Wait Until Keyword Succeeds    10s    2s    Element Should Be Visible    //android.widget.TextView[@text="Are you sure you want to log out?"]
+    Wait Until Keyword Succeeds    20s    2s    Element Should Be Visible    //android.widget.TextView[@text="Are you sure you want to log out?"]
     Click Element    //android.widget.Button[@text="YES"]
     Sleep    2s
     ${feedback_status}    Run Keyword And Return Status    Element Should Be Visible    //android.widget.TextView[@text="You have successfully logged out"]
     Run Keyword If    ${feedback_status}    Click Element    //android.widget.Button[@text="Skip"]
-    Wait Until Keyword Succeeds    15s    3s    Element Should Be Visible    ${textbox_login_obj}
+    Wait Until Keyword Succeeds    30s    3s    Element Should Be Visible    ${textbox_login_obj}
 
 Swipe_down_until_element
     [Arguments]    ${element}
