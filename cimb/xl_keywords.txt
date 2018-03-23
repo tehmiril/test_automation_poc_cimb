@@ -17,7 +17,7 @@ Read_RF_Keywords_Data
     #Log    ${mlist}
     ${full_content_string2}=    Replace String    ${full_content_string}    <userID>    ${userID}
     ${full_content_string3}=    Replace String    ${full_content_string2}    <dynamic>    ${test_case_content}
-    Create File    ${suite_name}.robot    ${full_content_string3}
+    Create File    '${suite_name}'.robot    ${full_content_string3}
     #Log Dictionary    ${dict_keywords}
 
 Get_data_per_column
