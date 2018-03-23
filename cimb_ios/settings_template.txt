@@ -14,6 +14,7 @@ Library           Collections
 Resource          Object_repo_CIMB_iOS.txt
 Resource          bill_payment_keywords.txt
 Resource	  exception_handling_keywords.txt
+Resource	  ${device}
 
 *** Test Cases ***
 <dynamic>

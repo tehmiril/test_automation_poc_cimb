@@ -11,13 +11,13 @@ Open_SMS
     ...    appPackage=${appPackage_SMS}    appActivity=${appActivity_SMS}    noReset=true
     Set Suite Variable    ${SMS_app}    ${SMS_app}
     ${current_activity}    Get Activity
-    Wait Until Element Is Visible    //*[@resource-id="com.google.android.apps.messaging:id/start_new_conversation_button"]    10s
+    Wait Until Element Is Visible    //*[@resource-id="com.google.android.apps.messaging:id/start_new_conversation_button"]    20s
 
 Select_1418_SMS
     ${search_selected}    Run Keyword And Return Status    Element Should Be Visible    //android.widget.EditText
     Run Keyword If    ${search_selected}    Hide Keyboard
     Click Element    //*[@resource-id="com.google.android.apps.messaging:id/conversation_name" and @text="1418"]
-    Wait Until Element Is Visible    //*[@resource-id="com.google.android.apps.messaging:id/conversation_title" and @text="1418"]    10s
+    Wait Until Element Is Visible    //*[@resource-id="com.google.android.apps.messaging:id/conversation_title" and @text="1418"]    20s
     ${messages}    Get Matching Xpath Count    //*[@resource-id="android:id/list"]/android.widget.FrameLayout
     ${message_text_last}    Get Element Attribute    //*[@resource-id="android:id/list"]/android.widget.FrameLayout[${messages}]/descendant::*[@class="android.widget.TextView" and contains (@text,"Jangan beri ke siapapun!")]    text
     ${message_last_string}    Convert To String    ${message_text_last}

@@ -1,0 +1,9 @@
+*** Variables ***
+${iosVersion}     version=10.3.1    #version=10.3.3    #version=9.3.5
+${iosdeviceName}    Accenture-Mac01's iPad    #Accenture-Mac01's iPhone    #Accenture01's iPhone
+${UDID1}         a1e70a0d643b3de2b863eeb578ed140d6a9c2b50
+${iosplatformName}    iOS
+${iosappiumServer}    http://localhost:4723/wd/hub
+${bundleID}       com.cimbniaga.CIMB
+${iosautomationName}    XCUITest
+${usePrebuiltWDA}    True

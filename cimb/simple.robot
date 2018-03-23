@@ -18,4 +18,5 @@ Resource          xl_keywords.txt
 Login_logout_from_Jenkins
     Open Android CIMB app
     Login_app    ${userID}
-	Logout_app
+    #Positive_rekpon_transfer_to_other_rekpon2    ${rekpon_dest}
+    Logout_app
