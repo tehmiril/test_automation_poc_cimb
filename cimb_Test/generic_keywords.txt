@@ -1,0 +1,83 @@
+*** Keywords ***
+Open IOS CIMB app
+    ${iosdriver}    Open Application    ${appiumServer}    platformName=${iosplatformName}    platformVersion=${iosVersion}    deviceName=${iosdeviceName}    bundleId=${iosappPackage}
+    ...    udid=${UDID1}    newCommandTimeout=10000    automationName=${automationName}
+    Set Suite Variable    ${iosdriver}
+    Capture Page Screenshot    login_page.png
+
+Open Android CIMB app
+    ${CIMB_app}=    Open Application    ${androidappiumServer}    platformName=${androidplatformName}    platformVersion=${androidVersion}    deviceName=${androiddeviceName}    appPackage=${androidappPackage}
+    ...    appActivity=${androidappName}    noReset=true    automationName=UiAutomator2
+    Wait Until Keyword Succeeds    30s    3s    Element Should Be Visible    ${textbox_login_obj}
+    Set Suite Variable    ${CIMB_app}    ${CIMB_app}
+    Capture Page Screenshot    login_page.png
+
+Login_app
+    [Arguments]    ${user_id}
+    Click Element    ${textbox_login_obj}
+    Input Text    ${textbox_login_obj}    ${user_id}
+    Hide Keyboard
+    Element Should Be Enabled    ${login_button_obj}
+    Click Element    ${login_button_obj}
+    Wait Until Keyword Succeeds    20s    2s    Element Should Be Visible    //android.widget.TextView[@text="Passcode"]
+    ${status_otp}    Run Keyword And Return Status    Page Should Contain Text    We have sent you a one time passcode for ${user_id}
+    Capture Page Screenshot    otp_sent.png
+    Run Keyword If    ${status_otp}==${FALSE}    Fail    No OTP
+    Get_OTP
+    Click Element    ${otp_login_obj}
+    Input Text    ${otp_login_obj}    ${current_element_otp}
+    #Click Element    //android.widget.ViewFlipper/descendant::android.widget.EditText[@text=""]
+    #Input Text    //android.widget.ViewFlipper/descendant::android.widget.EditText[@text=""]    ${current_element_otp}
+    Hide Keyboard
+    Click Element    ${submit_otp_button_obj}
+    #Wait Until Keyword Succeeds    20s    2s    Element Should Be Visible    //android.widget.TextView[@text="${user_id}"]
+    Sleep    15s
+
+Logout_app
+    Click Element    //android.widget.Button[@text="x"]
+    Wait Until Keyword Succeeds    20s    2s    Element Should Be Visible    //android.widget.TextView[@text="Home"]
+    Swipe_down_until_element    //android.widget.TextView[@text="Log Out"]
+    Click Element    //android.widget.TextView[@text="Log Out"]
+    Wait Until Keyword Succeeds    20s    2s    Element Should Be Visible    //android.widget.TextView[@text="Are you sure you want to log out?"]
+    Click Element    //android.widget.Button[@text="YES"]
+    Sleep    2s
+    ${feedback_status}    Run Keyword And Return Status    Element Should Be Visible    //android.widget.TextView[@text="You have successfully logged out"]
+    Run Keyword If    ${feedback_status}    Click Element    //android.widget.Button[@text="Skip"]
+    Wait Until Keyword Succeeds    30s    3s    Element Should Be Visible    ${textbox_login_obj}
+
+Swipe_down_until_element
+    [Arguments]    ${element}
+    : FOR    ${loop}    IN RANGE    0    10
+    \    Swipe    600    600    600    300
+    \    ${count_element}    Get Matching Xpath Count    ${element}
+    \    Run Keyword If    ${count_element}==1    Run Keywords    Log    Stop swipe down
+    \    ...    AND    Exit For Loop
+
+Get_amount_for_validation
+    [Arguments]    ${element}
+    ${full_amount_shown}    Get Text    ${element}
+    ${full_amount_string}    Convert To String    ${full_amount_shown}
+    ${elements_amount}    Split String    ${full_amount_string}    .
+    #Get the first from the list
+    ${amount_first}    Get From List    ${elements_amount}    0
+    ${finalelement_amount}    Strip String    ${amount_first}    characters=IDR${SPACE}
+    ${finalelement_amount2}    Remove String Using Regexp    ${finalelement_amount}    [,]
+    Set Suite Variable    ${current_element_amount}    ${finalelement_amount2}
+
+Get_mobile_number_dest_for_validation
+    [Arguments]    ${element}
+    ${dest_number_rekpon}    Get Text    ${element}
+    ${dest_number_rekpon_string}    Convert To String    ${dest_number_rekpon}
+    ${dest_number_rekpon_string2}    Replace String Using Regexp    ${dest_number_rekpon_string}    ^62    0
+    Set Suite Variable    ${current_element_dest_num}    ${dest_number_rekpon_string2}
+
+Check_which_page_for_error
+    Run Keyword If    '${current_page}'=='fill_in_rekpon_transfer_rekpon'    Error_rekpon_transfer_rekpon
+
+Error_rekpon_transfer_rekpon
+    ${error_visible}    Run Keyword And Return Status    Page Should Contain Text    Your beneficiary
+    Run Keyword If    ${error_visible}    Run Keywords    Click Element    //android.widget.Button[@text="NO"]
+    ...    AND    Click Element    //android.widget.Button[@text="C"]
+    Click Element    //android.widget.Button[@text="x"]
+    Wait Until Keyword Succeeds    20s    2s    Element Should Be Visible    //android.widget.TextView[@text="Home"]
+    Click Element    //android.widget.TextView[@text="Home"]

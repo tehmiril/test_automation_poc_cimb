@@ -1,0 +1,7 @@
+*** Variables ***
+${appPackage_SMS}    com.google.android.apps.messaging
+${androidVersion_SMS}    6.0.1     #7.0
+${deviceName_SMS}    Akira
+${platformName_SMS}    Android
+${appActivity_SMS}    .ui.ConversationListActivity
+${appiumServer_SMS}    http://localhost:4723/wd/hub

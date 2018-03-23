@@ -1,0 +1,69 @@
+*** Keywords ***
+Positive_rekpon_transfer_to_other_rekpon2
+    [Arguments]    ${dest_num}    ${transfer_amount}
+    Open_transfer
+    Select_transfer_to_other_RekPon
+    Fill_in_transfer_RekPon_details    ${dest_num}    ${transfer_amount}
+    Validate_transfer_RekPon_confirm_page    ${dest_num}    ${transfer_amount}
+    Continue_submit
+
+Open_transfer
+    Click Element    ${transfer_menu_button_obj}
+    Wait Until Keyword Succeeds    15s    3s    Element Should Be Visible    ${transfer_menu_button_obj}
+
+Select_transfer_to_other_RekPon
+    Click Element    //android.widget.TextView[@text="Transfer to Rekening Ponsel"]
+    Wait Until Keyword Succeeds    15s    3s    Element Should Be Visible    ${transfer_menu_button_obj}
+
+Fill_in_transfer_RekPon_details
+    [Arguments]    ${dest_num}    ${transfer_amount}
+    Set Suite Variable    ${current_page}    fill_in_rekpon_transfer_rekpon
+    Click Element    //android.widget.EditText[@text="Enter Mobile number"]
+    Input Text    //android.widget.EditText[@text="Enter Mobile number"]    ${dest_num}    #085349251023
+    Hide Keyboard
+    Click Element    //android.widget.EditText[@text="Enter amount"]
+    Input Text    //android.widget.EditText[@text="Enter amount"]    ${transfer_amount}    #10000
+    Hide Keyboard
+    Capture Page Screenshot    transfer_rekpon_details1.png
+    #Input Text    //android.widget.TextView[@text="Enter Description (optional)"]    testaut
+    #Hide Keyboard
+    Swipe_down_until_element    //android.widget.Button[@text="NEXT"]
+    Click Element    //android.widget.Button[@text="NEXT"]
+    Wait Until Keyword Succeeds    20s    2s    Element Should Be Visible    //android.widget.TextView[@text="Confirm"]
+    Capture Page Screenshot    transfer_rekpon_confirm.png
+
+Validate_transfer_RekPon_confirm_page
+    [Arguments]    ${dest_num}    ${transfer_amount}
+    Swipe_down_until_element    //android.widget.TextView[@text="AMOUNT"]
+    #maybe perform more validation here
+    Get_mobile_number_dest_for_validation    //android.widget.TextView[@text="TRANSFER TO"]/following-sibling::*/descendant::android.widget.TextView[@text="ACCOUNT NUMBER"]/following-sibling::android.widget.TextView
+    Get_amount_for_validation    //android.widget.TextView[@text="AMOUNT"]/following-sibling::android.widget.TextView
+    Should Be Equal As Integers    ${current_element_amount}    ${transfer_amount}
+    Should Be Equal As Integers    ${current_element_dest_num}    ${dest_num}
+
+Continue_submit
+    Click Element    //android.widget.Button[@text="CONFIRM"]
+    Wait Until Keyword Succeeds    20s    2s    Element Should Be Visible    //android.widget.TextView[@text="Enter Go Mobile PIN"]
+    ${command_pin}    Get Text    //android.widget.TextView[contains(@text,"Enter the")]
+    ${user_pin_string}    Convert To String    ${mpin}
+    ${user_pin}    Split String    ${user_pin_string}    ;
+    ${command_pin_string}    Convert To String    ${command_pin}
+    ${command_pin_string2}    Remove String    ${command_pin_string}    Enter the${SPACE}    ${SPACE}digit of your Go Mobile PIN
+    ${elements_pin}    Split String    ${command_pin_string2}    ${SPACE}and${SPACE}
+    ${pin_first}    Get From List    ${elements_pin}    0
+    ${pin_first_index}    Evaluate    ${pin_first}-1
+    ${pin_second}    Get From List    ${elements_pin}    1
+    ${pin_second_index}    Evaluate    ${pin_second}-1
+    ${enter_first_pin}    Get From List    ${user_pin}    ${pin_first_index}
+    ${enter_second_pin}    Get From List    ${user_pin}    ${pin_second_index}
+    Click Element    //android.widget.Button[@text="${enter_first_pin}"]
+    Click Element    //android.widget.Button[@text="${enter_second_pin}"]
+    Click Element    //android.widget.Button[@text="SUBMIT"]
+    #Sleep    5s
+    Wait Until Keyword Succeeds    20s    2s    Element Should Be Visible    //android.widget.TextView[@text="Transaction Successful"]
+    #maybe perform more validation here
+    Sleep    3s
+    #Go back to main page
+    Click Element    //android.widget.Button[@text="Close"]
+    #Wait Until Keyword Succeeds    20s    2s    Element Should Be Visible    //android.widget.TextView[@text="${user_id}"]
+    Sleep    2s
