@@ -1,7 +1,0 @@
-*** Variables ***
-${androidappPackage}    id.co.cimbniaga.mobile.android
-${androidVersion}    8.0.0
-${androiddeviceName}    25b8e0b6
-${androidplatformName}    Android
-${androidappiumServer}    http://localhost:4723/wd/hub
-${androidappName}    id.co.cimbniaga.mobile.android.GoMobile
