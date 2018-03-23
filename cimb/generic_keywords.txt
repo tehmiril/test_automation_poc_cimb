@@ -77,8 +77,8 @@ Check_which_page_for_error
 
 Error_rekpon_transfer_rekpon
     ${error_visible1}    Run Keyword And Return Status    Page Should Contain Text    Your beneficiary
-    ${error_visible2}    Run Keyword And Return Status    Page Should Contain Text    Your beneficiary
-    Run Keyword If    ${error_visible}    Click Element    //android.widget.Button[@text="NO"]
+    ${error_visible2}    Run Keyword And Return Status    Page Should Contain Text    Insufficient
+    Run Keyword If    ${error_visible1}    Click Element    //android.widget.Button[@text="NO"]
     ...    ELSE IF    ${error_visible2}    Click Element    //android.widget.Button[@text="OK"]
     Click Element    //android.widget.Button[@text="C"]
     Click Element    //android.widget.Button[@text="x"]
