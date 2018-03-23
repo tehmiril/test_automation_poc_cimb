@@ -31,7 +31,7 @@ Login_app
     Hide Keyboard
     Click Element    ${submit_otp_button_obj}
     #Wait Until Keyword Succeeds    20s    2s    Element Should Be Visible    //android.widget.TextView[@text="${user_id}"]
-    Sleep    15s
+    Sleep    20s
 
 Logout_app
     Click Element    //android.widget.Button[@text="x"]
