@@ -2,8 +2,8 @@
 Open IOS CIMB app
     ${ios_CIMB_app}=    Open Application    ${iosappiumServer}    platformName=${iosplatformName}    platformVersion=${iosVersion}    deviceName=${iosdeviceName}    bundleId=${bundleID}
     ...    udid=${UDID1}    automationName=${iosautomationName}    preventWDAAttachments=True		#usePrebuiltWDA=True    #newCommandTimeout=10000
-    #Sleep    10s
-    Wait Until Keyword Succeeds    30s    2s    Element Should Be Visible    ${textbox_login_obj}
+    Sleep    10s
+    #Wait Until Keyword Succeeds    30s    2s    Element Should Be Visible    ${textbox_login_obj}
     Set Suite Variable    ${ios_CIMB_app}    ${ios_CIMB_app}
 
 Open Android CIMB app
@@ -129,11 +129,12 @@ Continue_submit_iOS
     Click Element    accessibility_id=${first_pin}    #//android.widget.Button[@text="${enter_first_pin}"]
     Click Element    accessibility_id=${second_pin}    #//android.widget.Button[@text="${enter_second_pin}"]
     Click Element    ${submit_cc_bp_button_obj}    #//android.widget.Button[@text="SUBMIT"]
-    #Sleep    5s
-    Wait Until Keyword Succeeds    9s    3s    Element Should Be Visible    ${complete_transaction_button_obj}    #//android.widget.TextView[@text="Transaction Successful"]
+    Sleep    5s
+    #Wait Until Keyword Succeeds    9s    3s    Element Should Be Visible    ${complete_transaction_button_obj}    #//android.widget.TextView[@text="Transaction Successful"]
     #maybe perform more validation here
     Sleep    3s
     #Log Source
     #Go back to main page
     Click Element    ${close_success_transaction}    #//android.widget.Button[@text="Close"]
-    Wait Until Keyword Succeeds    6s    2s    Page Should Contain Text    ${user_id}    #Element Should Be Visible    //android.widget.TextView[@text="${user_id}"]
+    #Wait Until Keyword Succeeds    6s    2s    Page Should Contain Text    ${user_id}    #Element Should Be Visible    //android.widget.TextView[@text="${user_id}"]
+    Sleep   5s
