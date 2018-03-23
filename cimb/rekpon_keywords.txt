@@ -4,7 +4,15 @@ Positive_rekpon_transfer_to_other_rekpon2
     Open_transfer
     Select_transfer_to_other_RekPon
     Fill_in_transfer_RekPon_details    ${dest_num}    ${transfer_amount}
-    Validate_transfer_RekPon_confirm_page    ${dest_num}    ${transfer_amount}
+    #Validate_transfer_RekPon_confirm_page    ${dest_num}    ${transfer_amount}
+    Continue_submit
+
+Positive_rekpon_transfer_to_other_CIMB_account
+    [Arguments]    ${dest_num}    ${transfer_amount}
+    Open_transfer
+    Select_transfer_to_other_CIMB_account
+    Fill_in_transfer_CIMB_account_details    ${dest_num}    ${transfer_amount}
+    #Validate_transfer_RekPon_confirm_page    ${dest_num}    ${transfer_amount}
     Continue_submit
 
 Open_transfer
@@ -13,6 +21,10 @@ Open_transfer
 
 Select_transfer_to_other_RekPon
     Click Element    //android.widget.TextView[@text="Transfer to Rekening Ponsel"]
+    Wait Until Keyword Succeeds    15s    3s    Element Should Be Visible    ${transfer_menu_button_obj}
+
+Select_transfer_to_other_CIMB_account
+    Click Element    //android.widget.TextView[@text="Transfer to Other CIMB Niaga Account"]
     Wait Until Keyword Succeeds    15s    3s    Element Should Be Visible    ${transfer_menu_button_obj}
 
 Fill_in_transfer_RekPon_details
@@ -31,6 +43,23 @@ Fill_in_transfer_RekPon_details
     Click Element    //android.widget.Button[@text="NEXT"]
     Wait Until Keyword Succeeds    20s    2s    Element Should Be Visible    //android.widget.TextView[@text="Confirm"]
     Capture Page Screenshot    transfer_rekpon_confirm.png
+
+Fill_in_transfer_CIMB_account_details
+    [Arguments]    ${dest_num}    ${transfer_amount}
+    Set Suite Variable    ${current_page}    fill_in_rekpon_transfer_CIMB_acc
+    Click Element    //android.widget.EditText[@text="Enter Account Number"]
+    Input Text    //android.widget.EditText[@text="Enter Account Number"]    ${dest_num}    #085349251023
+    Hide Keyboard
+    Click Element    //android.widget.EditText[@text="Enter amount"]
+    Input Text    //android.widget.EditText[@text="Enter amount"]    ${transfer_amount}    #10000
+    Hide Keyboard
+    Capture Page Screenshot    transfer_CIMB_details1.png
+    #Input Text    //android.widget.TextView[@text="Enter Description (optional)"]    testaut
+    #Hide Keyboard
+    Swipe_down_until_element    //android.widget.Button[@text="NEXT"]
+    Click Element    //android.widget.Button[@text="NEXT"]
+    Wait Until Keyword Succeeds    20s    2s    Element Should Be Visible    //android.widget.TextView[@text="Confirm"]
+    Capture Page Screenshot    transfer_cimb_confirm.png
 
 Validate_transfer_RekPon_confirm_page
     [Arguments]    ${dest_num}    ${transfer_amount}

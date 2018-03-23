@@ -75,9 +75,11 @@ Check_which_page_for_error
     Run Keyword If    '${current_page}'=='fill_in_rekpon_transfer_rekpon'    Error_rekpon_transfer_rekpon
 
 Error_rekpon_transfer_rekpon
-    ${error_visible}    Run Keyword And Return Status    Page Should Contain Text    Your beneficiary
-    Run Keyword If    ${error_visible}    Run Keywords    Click Element    //android.widget.Button[@text="NO"]
-    ...    AND    Click Element    //android.widget.Button[@text="C"]
+    ${error_visible1}    Run Keyword And Return Status    Page Should Contain Text    Your beneficiary
+    ${error_visible2}    Run Keyword And Return Status    Page Should Contain Text    Your beneficiary
+    Run Keyword If    ${error_visible}    Click Element    //android.widget.Button[@text="NO"]
+    ...    ELSE IF    ${error_visible2}    Click Element    //android.widget.Button[@text="OK"]
+    Click Element    //android.widget.Button[@text="C"]
     Click Element    //android.widget.Button[@text="x"]
     Wait Until Keyword Succeeds    20s    2s    Element Should Be Visible    //android.widget.TextView[@text="Home"]
     Click Element    //android.widget.TextView[@text="Home"]
