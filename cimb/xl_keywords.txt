@@ -4,7 +4,8 @@ open_xl
     Open Excel    ${xl_path}
 
 Read_RF_Keywords_Data
-    [Arguments]    ${xl_sheetname}	${suite_name}
+    [Arguments]    ${xl_sheetname}
+    ${suite_name}=    Read Cell Data By Name	   ${xl_sheetname}		A2
     Set Suite Variable    ${test_case_populated}    ${FALSE}
     Create_RF_Dictionary
     ${FILE_CONTENT_SETTINGS}=    Get File    settings_template.txt
@@ -17,7 +18,7 @@ Read_RF_Keywords_Data
     #Log    ${mlist}
     ${full_content_string2}=    Replace String    ${full_content_string}    <userID>    ${userID}
     ${full_content_string3}=    Replace String    ${full_content_string2}    <dynamic>    ${test_case_content}
-    Create File    '${suite_name}'.robot    ${full_content_string3}
+    Create File    ${suite_name}.robot    ${full_content_string3}
     #Log Dictionary    ${dict_keywords}
 
 Get_data_per_column

@@ -10,4 +10,4 @@ Test_excel
     Log    ${CURDIR}
     ${sheets}    Set Variable    Test_Scenario
     Open Excel    ${excel_path}
-    Read_RF_Keywords_Data    ${sheets}		${suite_name}
+    Read_RF_Keywords_Data    ${sheets}
