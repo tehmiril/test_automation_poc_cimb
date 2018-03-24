@@ -46,6 +46,7 @@ Logout_app
     #Log Source
     Run Keyword If    ${feedback_status}    Click Element    ${skip_feedback_obj}    #//android.widget.Button[@text="Skip"]
     #Wait Until Keyword Succeeds    9s    3s    Element Should Be Visible    ${textbox_login_obj}
+    Sleep       5s
 
 Swipe_down_until_element
     [Arguments]    ${element}
