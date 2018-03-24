@@ -3,16 +3,20 @@ Positive_rekpon_transfer_to_other_rekpon2
     [Arguments]    ${dest_num}    ${transfer_amount}
     Open_transfer
     Select_transfer_to_other_RekPon
+    Sleep       5s
     Fill_in_transfer_RekPon_details    ${dest_num}    ${transfer_amount}
     #Validate_transfer_RekPon_confirm_page    ${dest_num}    ${transfer_amount}
+    Sleep       5s
     Continue_submit
 
 Positive_rekpon_transfer_to_other_CIMB_account
     [Arguments]    ${dest_num}    ${transfer_amount}
     Open_transfer
     Select_transfer_to_other_CIMB_account
+    Sleep       5s
     Fill_in_transfer_CIMB_account_details    ${dest_num}    ${transfer_amount}
     #Validate_transfer_RekPon_confirm_page    ${dest_num}    ${transfer_amount}
+    Sleep       5s
     Continue_submit
 
 Open_transfer
