@@ -44,7 +44,8 @@ Logout_app
     Sleep    2s
     ${feedback_status}    Run Keyword And Return Status    Element Should Be Visible    //android.widget.TextView[@text="You have successfully logged out"]
     Run Keyword If    ${feedback_status}    Click Element    //android.widget.Button[@text="Skip"]
-    Wait Until Keyword Succeeds    30s    3s    Element Should Be Visible    ${textbox_login_obj}
+    #Wait Until Keyword Succeeds    30s    3s    Element Should Be Visible    ${textbox_login_obj}
+    Sleep       5s
 
 Swipe_down_until_element
     [Arguments]    ${element}
