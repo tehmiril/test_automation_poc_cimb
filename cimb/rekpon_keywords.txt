@@ -46,7 +46,7 @@ Fill_in_transfer_RekPon_details
     Swipe_down_until_element    //android.widget.Button[@text="NEXT"]
     Click Element    //android.widget.Button[@text="NEXT"]
     ${status_confirm}    Run Keyword And Return Status    Wait Until Keyword Succeeds    20s    2s    Element Should Be Visible    //android.widget.TextView[@text="Confirm"]
-    Run Keyword If    ${status_confirm}==${FALSE}    Check_which_page_for_error
+    Run Keyword If    ${status_confirm}==${FALSE}    Run Keyword And Continue On Failure        Check_which_page_for_error
     Capture Page Screenshot    transfer_rekpon_confirm.png
 
 Fill_in_transfer_CIMB_account_details
