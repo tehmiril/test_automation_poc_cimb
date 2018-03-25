@@ -1,0 +1,24 @@
+*** Keywords ***
+Open Calc app
+    Open Application    ${appiumServer}    platformName=${platformName}    platformVersion=${androidVersion}    deviceName=${deviceName}    appPackage=${appPackage}    appActivity=${appActivity}
+
+Calc_operation_1_digit_each
+    [Arguments]    ${sign_1}    ${digit_1}    ${digit_2}    ${exp_result}
+    [Documentation]    Here we put activities that the calculator will perform
+    Convert To List    ${digit_1}
+    Click Element    //*[@resource-id="com.android.calculator2:id/digit_${digit_1}"]
+    Run Keyword If    '${sign_1}'=='multiply'    Click Element    ${signMul}
+    ...    ELSE IF    '${sign_1}'=='add'    Click Element    ${signPlus}
+    ...    ELSE IF    '${sign_1}'=='sub'    Click Element    ${signMin}
+    ...    ELSE IF    '${sign_1}'=='div'    Click Element    ${signDiv}
+    Click Element    //*[@resource-id="com.android.calculator2:id/digit_${digit_2}"]
+    Set Suite Variable    ${current_exp_result}    ${exp_result}
+
+Get Result
+    [Documentation]    This will show the result
+    Click Element    ${equals}
+
+Verify Result
+    [Documentation]    Verifies the displayed result
+    ${result}=    Get Element Attribute    ${displayedResult}    text
+    Should Be Equal    ${result}    ${current_exp_result}

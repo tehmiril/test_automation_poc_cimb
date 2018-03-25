@@ -1,0 +1,5 @@
+*** Variables ***
+${sign1}    		multiply
+${digit1}    		4
+${digit2}    		8
+${expectedResult}	32

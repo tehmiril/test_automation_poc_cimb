@@ -1,0 +1,10 @@
+*** Variables ***
+#${digit7}        //*[@resource-id="com.android.calculator2:id/digit_7"]
+#${digit5}        //*[@resource-id="com.android.calculator2:id/digit_5"]
+${signMul}        //*[@resource-id="com.android.calculator2:id/op_mul"]
+${signDiv}        //*[@resource-id="com.android.calculator2:id/op_div"]
+${signPlus}       //*[@resource-id="com.android.calculator2:id/op_add"]
+${signMin}        //*[@resource-id="com.android.calculator2:id/op_sub"]
+${equals}         //*[@resource-id="com.android.calculator2:id/eq"]
+#${expectedResult}    35
+${displayedResult}    //*[@resource-id="com.android.calculator2:id/formula"]
