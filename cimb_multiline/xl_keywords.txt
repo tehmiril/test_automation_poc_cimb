@@ -1,0 +1,173 @@
+*** Keywords ***
+open_xl
+    [Arguments]    ${xl_path}
+    Open Excel    ${xl_path}
+
+Read_RF_Keywords_Data
+    [Arguments]    ${xl_sheetname}
+    ${suite_name}=    Read Cell Data By Name    ${xl_sheetname}    A2
+    Set Suite Variable    ${test_case_populated}    ${FALSE}
+    Create_RF_Dictionary
+    Create_TC_Dictionary
+    ${FILE_CONTENT_SETTINGS}=    Get File    settings_template.txt
+    ${full_content_string}    Convert To String    ${FILE_CONTENT_SETTINGS}
+    Set Suite Variable    ${eo_excel}    ${FALSE}
+    ${totalRow}=    Get Row Count    ${xl_sheetname}
+    : FOR    ${i}    IN RANGE    1    ${totalRow}
+    \    Get_value_B_column    ${xl_sheetname}    ${i}
+    \    Run Keyword If    ${eo_excel} and ${test_case_populated}    Exit For Loop
+    #Log    ${mlist}
+    ${full_content_string2}=    Replace String    ${full_content_string}    <userID>    ${userID}
+    ${full_content_string3}=    Replace String    ${full_content_string2}    <dynamic>    ${test_case_content}
+    Create File    ${suite_name}.robot    ${full_content_string3}
+    #Log Dictionary    ${dict_keywords}
+
+Get_data_per_column
+    [Arguments]    ${xl_sheetname}    ${xl_row}
+    ${totalColumn}=    Get Column Count    ${xl_sheetname}
+    #${i}    Set Variable    0
+    ${list}    Create List    ${EMPTY}
+    : FOR    ${i}    IN RANGE    2    ${totalColumn}
+    \    Log    col:${i};row:${xl_row}
+    \    ${data}=    Read Cell Data By Coordinates    ${xl_sheetname}    ${i}    ${xl_row}
+    \    Run Keyword If    '${data}'=='${EMPTY}'    Log    No!
+    \    ...    ELSE    Append To List    ${list}    ${data}
+    #Set Suite Variable    ${mlist}    ${list}
+
+Get_user_ID
+    Set Suite Variable    ${mlist}    ${list}
+
+Get_value_B_column
+    [Arguments]    ${xl_sheetname}    ${xl_row}
+    Check_dictionary_if_empty
+    ${test_case_name}=    Read Cell Data By Coordinates    ${xl_sheetname}    1    ${xl_row}
+    Run Keyword If    '${test_case_name}'!='${EMPTY}' and ${dict_empty}    Run Keywords    Set Suite Variable    ${current_test_case_name}    ${test_case_name}
+    ...    AND    Test_case_dict    ${xl_row}
+    ...    ELSE IF    '${test_case_name}'!='${EMPTY}' and ${dict_empty}==${FALSE}    Populate_test_case
+    ...    ELSE IF    '${test_case_name}'=='${EMPTY}' and ${dict_empty}==${FALSE} and ${eo_excel}    Populate_test_case
+    ...    ELSE IF    '${test_case_name}'=='${EMPTY}' and ${dict_empty}==${FALSE} and ${eo_excel}==${FALSE}    Populate_test_case
+    Get_value_C_column    ${xl_sheetname}    ${xl_row}
+
+Get_value_C_column
+    [Arguments]    ${xl_sheetname}    ${xl_row}
+    ${RF_custom_keyword_name}=    Read Cell Data By Coordinates    ${xl_sheetname}    2    ${xl_row}
+    Run Keyword If    '${RF_custom_keyword_name}'=='${EMPTY}'    Set Suite Variable    ${eo_excel}    ${TRUE}
+    ...    ELSE IF    '${RF_custom_keyword_name}'=='Login_app'    Get_user_login    ${xl_sheetname}    ${xl_row}
+    ...    ELSE IF    '${RF_custom_keyword_name}'!='Logout_app'    Get_value_D_column    ${xl_sheetname}    ${xl_row}    ${RF_custom_keyword_name}
+
+Get_value_D_column
+    [Arguments]    ${xl_sheetname}    ${xl_row}    ${RF_custom_keyword_name}
+    ${data_values}=    Read Cell Data By Coordinates    ${xl_sheetname}    3    ${xl_row}
+    ${data_values_string}    Convert To String    ${data_values}
+    ${results}=    Split String    ${data_values_string}    ;
+    ${total}=    Get Length    ${results}
+    Set To Dictionary    ${dict_keywords}    '${xl_row}'=${RF_custom_keyword_name};${data_values}
+
+Get_user_login
+    [Arguments]    ${xl_sheetname}    ${xl_row}
+    ${data_values}=    Read Cell Data By Coordinates    ${xl_sheetname}    3    ${xl_row}
+    Set Suite Variable    ${userID}    ${data_values}
+
+Populate_test_case
+    ${length} =    Get Length    ${dict_keywords}
+    Log Dictionary    ${dict_keywords}
+    ${FILE_CONTENT_TEST_CASE}=    Get File    test_case_template.txt
+    ${full_content_tc_string}    Convert To String    ${FILE_CONTENT_TEST_CASE}
+    ${full_string}=    Set Variable
+    : FOR    ${key}    IN    @{dict_keywords.keys()}
+    \    ${value}=    Get From Dictionary    ${dict_keywords}    ${key}
+    \    ${value_string}    Convert To String    ${value}
+    \    ${new_value_string}    Replace String    ${value_string}    ;    \t
+    \    ${full_string}=    Set Variable    ${full_string}\n\t${new_value_string}
+    ${full_content_string2}=    Replace String    ${full_content_tc_string}    <test_case_name>    ${current_test_case_name}
+    ${full_content_string3}=    Replace String    ${full_content_string2}    <RF_keywords>    ${full_string}
+    Set Suite Variable    ${test_case_content}    ${full_content_string3}
+    Set Suite Variable    ${test_case_populated}    ${TRUE}
+    #Create File    test1.robot    ${full_content_string3}
+
+Create_RF_Dictionary
+    ${dict_keywords1}    Create Dictionary
+    ${dict_keywords2}    Create Dictionary
+    ${dict_keywords3}    Create Dictionary
+    Set Suite Variable    \${dict_keywords1}
+    Set Suite Variable    \${dict_keywords2}
+    Set Suite Variable    \${dict_keywords3}
+    Set Suite Variable    ${dict_empty}    ${TRUE}
+
+Create_TC_Dictionary
+    ${dict_keywords}    Create Dictionary
+    Set Suite Variable    \${dict_tc}
+    #Set Suite Variable    ${dict_empty}    ${TRUE}
+
+Check_dictionary_if_empty
+    ${length} =    Get Length    ${dict_keywords}
+    Run Keyword If    ${length}==0    Set Suite Variable    ${dict_empty}    ${TRUE}
+    ...    ELSE    Set Suite Variable    ${dict_empty}    ${FALSE}
+
+Test_case_dict
+    [Arguments]    ${xl_row}
+    Set To Dictionary    ${dict_tc}    '${xl_row}'=${current_test_case_name}
+
+Count_dict_items
+    ${length} =    Get Length    ${dict_tc}
+    Set Suite Variable    ${tc_order}    ${length}
+
+Art_of_getting_by
+    [Arguments]    ${xl_sheetname}
+    ${suite_name}=    Read Cell Data By Name    ${xl_sheetname}    A2
+    ${userID}=    Read Cell Data By Name    ${xl_sheetname}    D2
+    #Set Suite Variable    ${test_case_populated}    ${FALSE}
+    ${FILE_SETTINGS}=    Get File    settings_template.txt
+    ${setting_string}    Convert To String    ${FILE_SETTINGS}
+    Create_RF_Dictionary
+    ${tc_1}=    Read Cell Data By Name    ${xl_sheetname}    B2
+    ${tc_2}=    Read Cell Data By Name    ${xl_sheetname}    B5
+    ${tc_3}=    Read Cell Data By Name    ${xl_sheetname}    B8
+    ${RF_custom_keyword_name1}=    Read Cell Data By Name    ${xl_sheetname}    C3
+    ${data_values1}=    Read Cell Data By Name    ${xl_sheetname}    D3
+    ${data_values_string1}    Convert To String    ${data_values1}
+    ${results1}=    Split String    ${data_values_string1}    ;
+    #${total}=    Get Length    ${results}
+    Set To Dictionary    ${dict_keywords1}    '1'=${RF_custom_keyword_name1};${data_values1}
+    ${RF_custom_keyword_name2}=    Read Cell Data By Name    ${xl_sheetname}    C6
+    ${data_values2}=    Read Cell Data By Name    ${xl_sheetname}    D6
+    ${data_values_string2}    Convert To String    ${data_values2}
+    ${results2}=    Split String    ${data_values_string2}    ;
+    #${total}=    Get Length    ${results}
+    Set To Dictionary    ${dict_keywords2}    '1'=${RF_custom_keyword_name2};${data_values2}
+    ${RF_custom_keyword_name3}=    Read Cell Data By Name    ${xl_sheetname}    C9
+    ${data_values3}=    Read Cell Data By Name    ${xl_sheetname}    D9
+    ${data_values_string3}    Convert To String    ${data_values3}
+    ${results3}=    Split String    ${data_values_string3}    ;
+    #${total}=    Get Length    ${results}
+    Set To Dictionary    ${dict_keywords3}    '1'=${RF_custom_keyword_name3};${data_values3}
+    ${FILE_CONTENT_TEST_CASE}=    Get File    test_case_template.txt
+    ${full_content_tc_string}    Convert To String    ${FILE_CONTENT_TEST_CASE}
+    ${full_string}=    Set Variable
+    : FOR    ${key}    IN    @{dict_keywords1.keys()}
+    \    ${value}=    Get From Dictionary    ${dict_keywords1}    ${key}
+    \    ${value_string}    Convert To String    ${value}
+    \    ${new_value_string}    Replace String    ${value_string}    ;    \t
+    \    ${full_string}=    Set Variable    ${full_string}\n\t${new_value_string}
+    ${full_content_string2}=    Replace String    ${full_content_tc_string}    <test_case_name1>    ${tc_1}
+    ${full_content_string3}=    Replace String    ${full_content_string2}    <RF_keywords1>    ${full_string}
+    ${full_string1}=    Set Variable
+    : FOR    ${key}    IN    @{dict_keywords2.keys()}
+    \    ${value}=    Get From Dictionary    ${dict_keywords2}    ${key}
+    \    ${value_string}    Convert To String    ${value}
+    \    ${new_value_string}    Replace String    ${value_string}    ;    \t
+    \    ${full_string1}=    Set Variable    ${full_string1}\n\t${new_value_string}
+    ${full_content_string4}=    Replace String    ${full_content_string3}    <test_case_name2>    ${tc_2}
+    ${full_content_string5}=    Replace String    ${full_content_string4}    <RF_keywords2>    ${full_string1}
+    ${full_string2}=    Set Variable
+    : FOR    ${key}    IN    @{dict_keywords3.keys()}
+    \    ${value}=    Get From Dictionary    ${dict_keywords3}    ${key}
+    \    ${value_string}    Convert To String    ${value}
+    \    ${new_value_string}    Replace String    ${value_string}    ;    \t
+    \    ${full_string2}=    Set Variable    ${full_string2}\n\t${new_value_string}
+    ${full_content_string6}=    Replace String    ${full_content_string5}    <test_case_name3>    ${tc_3}
+    ${full_content_string7}=    Replace String    ${full_content_string6}    <RF_keywords3>    ${full_string2}
+    #Set Suite Variable    ${test_case_content}    ${full_content_string7}
+    ${setting_string2}=    Replace String    ${setting_string}    <userID>    ${userID}
+    ${full_content_string8}=    Replace String    ${setting_string2}    <dynamic>    ${full_content_string7}
+    Create File    ${suite_name}.robot    ${full_content_string8}
