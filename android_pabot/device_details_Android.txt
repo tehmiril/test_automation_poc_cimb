@@ -1,0 +1,7 @@
+*** Variables ***
+${appPackage}     com.android.calculator2
+${androidVersion}    6.0    #7.0
+${deviceName}     Nexus_6P_v6
+${platformName}    Android
+${appActivity}    com.android.calculator2.Calculator
+${appiumServer}    http://localhost:4723/wd/hub

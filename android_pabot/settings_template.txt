@@ -13,7 +13,7 @@ Library           String
 Library           Collections
 Resource          Object_repo_CIMB_Android.txt
 Resource          bill_payment_keywords.txt
-Resource	  ${device}
+Resource	  device_details_Androidv5.txt
 
 *** Test Cases ***
 <dynamic>

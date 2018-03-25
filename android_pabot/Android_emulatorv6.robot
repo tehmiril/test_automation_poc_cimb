@@ -5,6 +5,7 @@ Library           Collections
 Resource          Test_data_calculator.txt
 Resource          Custom_calc_keywords.txt
 Resource		  Test_data_for_pabot.txt
+Resource	      device_details_Android.txt
 
 *** Test Cases ***
 Test basic calc app
