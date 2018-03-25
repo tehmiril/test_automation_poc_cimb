@@ -20,6 +20,7 @@ Positive_rekpon_transfer_to_other_CIMB_account
     Continue_submit
 
 Open_transfer
+    Sleep       2s
     Click Element    ${transfer_menu_button_obj}
     Wait Until Keyword Succeeds    15s    3s    Element Should Be Visible    ${transfer_menu_button_obj}
 
@@ -45,8 +46,6 @@ Fill_in_transfer_RekPon_details
     #Hide Keyboard
     Swipe_down_until_element    //android.widget.Button[@text="NEXT"]
     Click Element    //android.widget.Button[@text="NEXT"]
-    ${status_confirm}    Run Keyword And Return Status    Wait Until Keyword Succeeds    20s    2s    Element Should Be Visible    //android.widget.TextView[@text="Confirm"]
-    Run Keyword If    ${status_confirm}==${FALSE}    Run Keyword And Continue On Failure        Check_which_page_for_error
     Capture Page Screenshot    transfer_rekpon_confirm.png
 
 Fill_in_transfer_CIMB_account_details
@@ -63,7 +62,8 @@ Fill_in_transfer_CIMB_account_details
     #Hide Keyboard
     Swipe_down_until_element    //android.widget.Button[@text="NEXT"]
     Click Element    //android.widget.Button[@text="NEXT"]
-    Wait Until Keyword Succeeds    20s    2s    Element Should Be Visible    //android.widget.TextView[@text="Confirm"]
+    #Wait Until Keyword Succeeds    20s    2s    Element Should Be Visible    //android.widget.TextView[@text="Confirm"]
+    Sleep       5s
     Capture Page Screenshot    transfer_cimb_confirm.png
 
 Validate_transfer_RekPon_confirm_page
